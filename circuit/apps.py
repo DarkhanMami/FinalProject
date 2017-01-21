@@ -3,5 +3,5 @@ from __future__ import unicode_literals
 from django.apps import AppConfig
 
 
-class GateConfig(AppConfig):
-    name = 'gate'
+class CircuitConfig(AppConfig):
+    name = 'circuit'
