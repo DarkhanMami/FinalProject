@@ -1,0 +1,6 @@
+.greenSquare {
+    width: 12px;
+    height: 12px;
+    background-color: green;
+    display: inline-block;
+}
