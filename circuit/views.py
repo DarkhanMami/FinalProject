@@ -1,7 +1,6 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-# Create your views here.
-
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 import matplotlib.pyplot as plt
 import numpy as np
 from IPython.display import Image
@@ -9,49 +8,42 @@ from numpy import pi
 from qutip import *
 
 
+@csrf_exempt
+def calculate(request):
+    types = request.POST.getlist('types[]')
+    targets = request.POST.getlist('targets[]')
+    controls = request.POST.getlist('controls[]')
+    total = len(types)
+    N = 2
+    qc0 = QubitCircuit(N)
+    for i in range(total):
+        type = types[i]
+        target = targets[i]
+        control = controls[i]
+        tgets = []
+        ctrols = []
+        tgets.append(int(target))
+        if control != '':            
+            ctrols.append(int(control))
+            qc0.add_gate(type, targets=tgets, controls=ctrols)
+        else:
+            qc0.add_gate(type, targets=tgets)
+            
+
+    qc0.png
+    U_list0 = qc0.propagators()
+    U0 = gate_sequence_product(U_list0)
+    matrix = []
+
+    for i in range(0, N):
+       for j in range(0, N): 
+            matrix.append(str(U0.data[i,j]))
+
+
+    return JsonResponse({
+        "matrix": matrix
+    })
+
 
 def index(request):
     return render(request, 'circuit.html')
-
-
-@require_http_methods("POST")
-def remove_gates(request):
-	remove_gate(request.POST["index"])
-
-
-@require_http_methods("POST")
-def add_gates(request):
-	add_gate(request.POST["name"], targets=request.POST["target"], controls=request.POST["control"])
-
-
-
-@require_http_methods("POST")
-def insert_gates(request):
-	gates.insert(request.POST["index"], Gate(request.POST["name"], targets=request.POST["target"], controls=request.POST["control"]))
-
-
-@require_http_methods("POST")
-def add_rotation_gates(request):
-	add_gate(request.POST["name"], request.POST["target"], None, pi/request.POST["angle"],r"\pi/" + request.POST["angle_text"])
-
-
-
-@require_http_methods("POST")
-def insert_rotation_gates(request):
-	gates.insert(request.POST["index"], Gate(request.POST["name"], request.POST["target"], None, pi/request.POST["angle"],r"\pi/" + request.POST["angle_text"]))
-
-
-# @require_http_methods("POST")
-# def clear_circuit(request):
-	
-
-# @require_http_methods("POST")
-# def repaint_circuit(gates):
-	
-
-# def print_result(circuit):
-
-# def find_adjacent_gates(circuit):
-
-# def resolve_circ_gates(circuit):
-

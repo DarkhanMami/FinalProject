@@ -1,6 +1,53 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    lines: <input type="text" id="lines"> <br>
 
-    <h1>Hello</h1>
+    types: <input type="text" name="types" value="SNOT">
+    targets: <input type="text" name="targets">
+    controls: <input type="text" name="controls"> <br>
+
+    types: <input type="text" name="types" value="CNOT">
+    targets: <input type="text" name="targets">
+    controls: <input type="text" name="controls"> <br>
+
+    <button onclick="send()"> CALCULATE </button>
+
+
+    <hr>
+    <div id="result"></div>
+
+{% endblock %}
+
+{% block script %}
+
+    <script>
+        function send() {
+            var form = new FormData();
+            $('input[name=types]').each(function(i, v) {
+                form.append("types[]", v.value);
+            });
+            $('input[name=targets]').each(function(i, v) {
+                form.append("targets[]", v.value);
+            });
+            $('input[name=controls]').each(function(i, v) {
+                form.append("controls[]", v.value);
+            });
+
+            var settings = {
+              "async": true,
+              "crossDomain": true,
+              "url": "http://localhost:8000/calculate/",
+              "method": "POST",
+              "processData": false,
+              "contentType": false,
+              "mimeType": "multipart/form-data",
+              "data": form
+            };
+
+            $.ajax(settings).done(function (response) {
+              $("#result").html(response);
+            });
+        }
+    </script>
 {% endblock %}
