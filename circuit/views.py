@@ -51,6 +51,7 @@ def insert_rotation_gates(request):
 
 # def print_result(circuit):
 
+# def find_adjacent_gates(circuit):
 
-
+# def resolve_circ_gates(circuit):
 
