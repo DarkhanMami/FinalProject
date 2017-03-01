@@ -1,11 +1,10 @@
 {% load staticfiles %}
-{% load twitter_messages %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>АКМ-Сервис</title>
+    <title>Circuit</title>
     {% block head %}
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
@@ -25,12 +24,6 @@
 </head>
 <body>
 
-    <ul class="messages">
-      {% for message in messages %}
-        {% get_twitter_bootstrap_alert_msg_css_name message.tags as alert_tag %}
-        <li class="alert alert-{{ alert_tag }}">{{ message }}</li>
-      {% endfor %}
-    </ul>
     {% block content %}
 
     {% endblock %}
