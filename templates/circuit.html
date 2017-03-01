@@ -1,36 +1,99 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    lines: <input type="text" id="lines"> <br>
+    qubits: <input type="text" id="qubits">
+    <button onclick="new_circuit()"> New Gate </button> 
+    <h4>Gates</h4>
+    name: <input type="text" name="g_types" value="Hadamard">
+    target: <input type="text" name="g_targets">
+    control: <input type="text" name="g_controls"> <br>
 
-    types: <input type="text" name="types" value="SNOT">
-    targets: <input type="text" name="targets">
-    controls: <input type="text" name="controls"> <br>
+    name: <input type="text" name="g_types" value="CNOT">
+    target: <input type="text" name="g_targets">
+    control: <input type="text" name="g_controls"> <br>
 
-    types: <input type="text" name="types" value="CNOT">
-    targets: <input type="text" name="targets">
-    controls: <input type="text" name="controls"> <br>
+    <button onclick="send()"> Add Gate </button>
 
-    <button onclick="send()"> CALCULATE </button>
+    <h4>Rotations</h4>
+    type: <input type="text" name="r_types" value="RX">
+    target: <input type="text" name="r_targets">
+    angle (pi/): <input type="text" name="r_angle"> <br>
+
+    type: <input type="text" name="r_types" value="RY">
+    target: <input type="text" name="r_targets">
+    angle (pi/): <input type="text" name="r_angle"> <br>
+
+    type: <input type="text" name="r_types" value="RZ">
+    target: <input type="text" name="r_targets">
+    angle (pi/): <input type="text" name="r_angle"> <br>
+
+    <button onclick="new_rotation()"> Add Rotation </button>
 
 
     <hr>
+    index: <input type="text" id="gate_ind"> 
+    <button onclick="remove_gate()"> Remove gate by index</button> 
+    <br>
     <div id="result"></div>
-
+    <img id="image"></img>
 {% endblock %}
 
 {% block script %}
 
     <script>
+        function new_circuit() {
+          var form = new FormData();
+          form.append("N", $("#qubits").val())
+
+            var settings = {
+              "async": true,
+              "crossDomain": true,
+              "url": "http://localhost:8000/new_circuit/",
+              "method": "POST",
+              "processData": false,
+              "contentType": false,
+              "mimeType": "multipart/form-data",
+              "data": form
+            };
+
+            $.ajax(settings).done(function (response) {
+              $("#result").html(response);
+              $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
+            });
+
+        }
+
+        function remove_gate() {
+          var form = new FormData();
+          form.append("ind", $("#gate_ind").val())
+
+            var settings = {
+              "async": true,
+              "crossDomain": true,
+              "url": "http://localhost:8000/remove_gate/",
+              "method": "POST",
+              "processData": false,
+              "contentType": false,
+              "mimeType": "multipart/form-data",
+              "data": form
+            };
+
+            $.ajax(settings).done(function (response) {
+              $("#result").html(response);
+              $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
+            });
+
+        }
+
         function send() {
             var form = new FormData();
-            $('input[name=types]').each(function(i, v) {
+            $('input[name=g_types]').each(function(i, v) {
                 form.append("types[]", v.value);
             });
-            $('input[name=targets]').each(function(i, v) {
+            $('input[name=g_targets]').each(function(i, v) {
                 form.append("targets[]", v.value);
             });
-            $('input[name=controls]').each(function(i, v) {
+            $('input[name=g_controls]').each(function(i, v) {
                 form.append("controls[]", v.value);
             });
 
@@ -47,7 +110,38 @@
 
             $.ajax(settings).done(function (response) {
               $("#result").html(response);
+              $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
             });
         }
+
+        function new_rotation() {
+            var form = new FormData();
+            $('input[name=r_types]').each(function(i, v) {
+                form.append("types[]", v.value);
+            });
+            $('input[name=r_targets]').each(function(i, v) {
+                form.append("targets[]", v.value);
+            });
+            $('input[name=r_angle]').each(function(i, v) {
+                form.append("angles[]", v.value);
+            });
+
+            var settings = {
+              "async": true,
+              "crossDomain": true,
+              "url": "http://localhost:8000/new_rotation/",
+              "method": "POST",
+              "processData": false,
+              "contentType": false,
+              "mimeType": "multipart/form-data",
+              "data": form
+            };
+
+            $.ajax(settings).done(function (response) {
+              $("#result").html(response);
+              $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
+            });
+        }
+
     </script>
 {% endblock %}
