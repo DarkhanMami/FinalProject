@@ -4,46 +4,46 @@
     qubits: <input type="text" id="qubits">
     <button onclick="new_circuit()"> New Gate </button> 
     <h4>Gates</h4>
-    name: <input type="text" name="g_types" value="Hadamard">
+    name: <input type="text" name="g_types" value="Hadamard" disabled>
     target: <input type="text" name="g_targets">
     control: <input type="text" name="g_controls" disabled> <br>
 
-    name: <input type="text" name="g_types" value="SQRTNOT">
+    name: <input type="text" name="g_types" value="SQRTNOT" disabled>
     target: <input type="text" name="g_targets">
     control: <input type="text" name="g_controls" disabled=""> <br>
 
-    name: <input type="text" name="g_types" value="CNOT">
+    name: <input type="text" name="g_types" value="CNOT" disabled>
     target: <input type="text" name="g_targets">
     control: <input type="text" name="g_controls"> <br>
 
-    name: <input type="text" name="g_types" value="CSIGN">
+    name: <input type="text" name="g_types" value="CSIGN" disabled>
     target: <input type="text" name="g_targets">
     control: <input type="text" name="g_controls"> <br>
 
-    name: <input type="text" name="g_types" value="BERKELEY">
+    name: <input type="text" name="g_types" value="BERKELEY" disabled>
     target: <input type="text" name="g_targets">
     control: <input type="text" name="g_controls" disabled> <br>
 
     <button onclick="send()"> Add Gate </button>
 
     <h4>SWAP Gates</h4>
-    type: <input type="text" name="s_types" value="SWAPALPHA">
+    type: <input type="text" name="s_types" value="SWAPALPHA" disabled>
     target: <input type="text" name="s_targets">
     angle (pi/): <input type="text" name="s_angle"> <br>
 
-    type: <input type="text" name="s_types" value="SWAP">
+    type: <input type="text" name="s_types" value="SWAP" disabled>
     target: <input type="text" name="s_targets">
     angle (pi/): <input type="text" name="s_angle" disabled> <br>
 
-    type: <input type="text" name="s_types" value="ISWAP">
+    type: <input type="text" name="s_types" value="ISWAP" disabled>
     target: <input type="text" name="s_targets">
     angle (pi/): <input type="text" name="s_angle" disabled> <br>
 
-    type: <input type="text" name="s_types" value="SQRTISWAP">
+    type: <input type="text" name="s_types" value="SQRTISWAP" disabled>
     target: <input type="text" name="s_targets">
     angle (pi/): <input type="text" name="s_angle" disabled> <br>
 
-    type: <input type="text" name="s_types" value="SQRTSWAP">
+    type: <input type="text" name="s_types" value="SQRTSWAP" disabled>
     target: <input type="text" name="s_targets">
     angle (pi/): <input type="text" name="s_angle" disabled> <br>
 
@@ -51,23 +51,23 @@
 
 
     <h4>Rotations</h4>
-    type: <input type="text" name="r_types" value="RX">
+    type: <input type="text" name="r_types" value="RX" disabled>
     target: <input type="text" name="r_targets">
     angle (pi/): <input type="text" name="r_angle"> <br>
 
-    type: <input type="text" name="r_types" value="RY">
+    type: <input type="text" name="r_types" value="RY" disabled>
     target: <input type="text" name="r_targets">
     angle (pi/): <input type="text" name="r_angle"> <br>
 
-    type: <input type="text" name="r_types" value="RZ">
+    type: <input type="text" name="r_types" value="RZ" disabled>
     target: <input type="text" name="r_targets">
     angle (pi/): <input type="text" name="r_angle"> <br>
 
-    type: <input type="text" name="r_types" value="PHASEGATE">
+    type: <input type="text" name="r_types" value="PHASEGATE" disabled>
     target: <input type="text" name="r_targets">
     angle (pi/): <input type="text" name="r_angle"> <br>
 
-    type: <input type="text" name="r_types" value="GLOBALPHASE">
+    type: <input type="text" name="r_types" value="GLOBALPHASE" disabled>
     target: <input type="text" name="r_targets">
     angle (pi/): <input type="text" name="r_angle"> <br>
 
@@ -125,7 +125,8 @@
             $.ajax(settings).done(function (response) {
               $("#result").html(response);
               $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
-            });
+              $("#gate_ind").val('');
+            });           
 
         }
 
@@ -155,6 +156,12 @@
             $.ajax(settings).done(function (response) {
               $("#result").html(response);
               $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
+              $('input[name=g_targets]').each(function(i, v) {
+                  v.value = '';
+              });
+              $('input[name=g_controls]').each(function(i, v) {
+                  v.value = '';
+              });
             });
         }
 
@@ -184,6 +191,12 @@
             $.ajax(settings).done(function (response) {
               $("#result").html(response);
               $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
+              $('input[name=r_targets]').each(function(i, v) {
+                  v.value = '';
+              });
+              $('input[name=r_angle]').each(function(i, v) {
+                  v.value = '';
+              });
             });
         }
 
@@ -213,6 +226,13 @@
             $.ajax(settings).done(function (response) {
               $("#result").html(response);
               $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
+              $('input[name=s_targets]').each(function(i, v) {
+                  v.value = '';
+              });
+              $('input[name=s_angle]').each(function(i, v) {
+                  v.value = '';
+              });
+
             });
         }
 

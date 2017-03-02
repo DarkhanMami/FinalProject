@@ -47,7 +47,7 @@
 
 \begin{document}
 \Qcircuit @C=1cm @R=1cm {
- &  \gate{R_x(\pi/2)}  & \qw \\ 
- &  \qw  & \qw \\ 
+ &  \gate{{\rm Z}}  &  \ctrl{1}  & \qw \\ 
+ &  \ctrl{-1}  &  \targ  & \qw \\ 
 }
 \end{document}
