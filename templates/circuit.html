@@ -78,7 +78,7 @@
     index: <input type="text" id="gate_ind"> 
     <button onclick="remove_gate()"> Remove gate by index</button> 
     <br>
-    <div id="result"></div>
+    <table id="result"></table>
     <img id="image"></img>
 {% endblock %}
 
@@ -101,7 +101,28 @@
             };
 
             $.ajax(settings).done(function (response) {
-              $("#result").html(response);
+              // $("#result").html(response);
+
+              var rowHtml = '';
+              var n = 0;
+              if ($("#qubits").val() == 1){
+                n = 2;
+              } else {
+                n = Math.pow($("#qubits").val(), 2)
+              }
+              var i = 0;
+
+              for (row = 0; row < n; row++) {
+                rowHtml+='<tr>';
+                for (col = 0; col < n; col++) {
+                  rowHtml+='<td>'+"0"+'</td>';
+                  i++;
+                }
+                rowHtml+='</tr>';
+              }
+              
+
+              $("#result").html(rowHtml);
               $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
             });
 
@@ -123,7 +144,48 @@
             };
 
             $.ajax(settings).done(function (response) {
-              $("#result").html(response);
+              var myMap = JSON.parse(response);
+              var myList = myMap['matrix'];
+              var rowHtml = '';
+
+              if (myList.length < 2) {
+                var n = 0;
+                if ($("#qubits").val() == 1){
+                  n = 2;
+                } else {
+                  n = Math.pow($("#qubits").val(), 2)
+                }
+                var i = 0;
+
+                for (row = 0; row < n; row++) {
+                  rowHtml+='<tr>';
+                  for (col = 0; col < n; col++) {
+                    rowHtml+='<td>'+"0"+'</td>';
+                    i++;
+                  }
+                  rowHtml+='</tr>';
+                }
+              } else {
+                var n = 0;
+                if ($("#qubits").val() == 1){
+                  n = 2;
+                } else {
+                  n = Math.pow($("#qubits").val(), 2)
+                }
+                var i = 0;
+
+                for (row = 0; row < n; row++) {
+                  rowHtml+='<tr>';
+                  for (col = 0; col < n; col++) {
+                    rowHtml+='<td>'+myList[i]+'</td>';
+                    i++;
+                  }
+                  rowHtml+='</tr>';
+                }
+              }
+
+              $("#result").html(rowHtml);
+
               $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
               $("#gate_ind").val('');
             });           
@@ -154,7 +216,34 @@
             };
 
             $.ajax(settings).done(function (response) {
-              $("#result").html(response);
+              var myMap = JSON.parse(response);
+              var myList = myMap['matrix'];
+              var rowHtml = '';
+
+
+              var n = 0;
+              if ($("#qubits").val() == 1){
+                n = 2;
+              } else {
+                n = Math.pow($("#qubits").val(), 2)
+              }
+              var i = 0;
+
+              for (row = 0; row < n; row++) {
+                rowHtml+='<tr>';
+                for (col = 0; col < n; col++) {
+                  rowHtml+='<td>'+myList[i]+'</td>';
+                  i++;
+                }
+                rowHtml+='</tr>';
+              }
+              
+
+              $("#result").html(rowHtml);
+
+
+
+
               $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
               $('input[name=g_targets]').each(function(i, v) {
                   v.value = '';
@@ -189,7 +278,30 @@
             };
 
             $.ajax(settings).done(function (response) {
-              $("#result").html(response);
+              var myMap = JSON.parse(response);
+              var myList = myMap['matrix'];
+              var rowHtml = '';
+
+
+              var n = 0;
+              if ($("#qubits").val() == 1){
+                n = 2;
+              } else {
+                n = Math.pow($("#qubits").val(), 2)
+              }
+              var i = 0;
+
+              for (row = 0; row < n; row++) {
+                rowHtml+='<tr>';
+                for (col = 0; col < n; col++) {
+                  rowHtml+='<td>'+myList[i]+'</td>';
+                  i++;
+                }
+                rowHtml+='</tr>';
+              }
+              
+
+              $("#result").html(rowHtml);
               $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
               $('input[name=r_targets]').each(function(i, v) {
                   v.value = '';
@@ -224,7 +336,30 @@
             };
 
             $.ajax(settings).done(function (response) {
-              $("#result").html(response);
+              var myMap = JSON.parse(response);
+              var myList = myMap['matrix'];
+              var rowHtml = '';
+
+
+              var n = 0;
+              if ($("#qubits").val() == 1){
+                n = 2;
+              } else {
+                n = Math.pow($("#qubits").val(), 2)
+              }
+              var i = 0;
+
+              for (row = 0; row < n; row++) {
+                rowHtml+='<tr>';
+                for (col = 0; col < n; col++) {
+                  rowHtml+='<td>'+myList[i]+'</td>';
+                  i++;
+                }
+                rowHtml+='</tr>';
+              }
+              
+
+              $("#result").html(rowHtml);
               $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
               $('input[name=s_targets]').each(function(i, v) {
                   v.value = '';
