@@ -73,8 +73,8 @@ def remove_gate(request):
 
 
     try:
-        for i in range(0, N**2):
-           for j in range(0, N**2):
+        for i in range(0, 2**N):
+           for j in range(0, 2**N):
                 matrix.append(str(U0.data[i,j]))
     except:
         print 'empty circuit'
@@ -130,7 +130,7 @@ def calculate(request):
     if N == 1:
         tmp = 2
     else:
-        tmp = N**2
+        tmp = 2**N
     for i in range(0, tmp):
        for j in range(0, tmp):            
             matrix.append(str(U0.data[i,j]))
@@ -180,7 +180,7 @@ def new_rotation(request):
     if N == 1:
         tmp = 2
     else:
-        tmp = N**2
+        tmp = 2**N
     for i in range(0, tmp):
        for j in range(0, tmp):            
             matrix.append(str(U0.data[i,j]))
@@ -234,7 +234,7 @@ def new_swap(request):
     if N == 1:
         tmp = 2
     else:
-        tmp = N**2
+        tmp = 2**N
     for i in range(0, tmp):
        for j in range(0, tmp):            
             matrix.append(str(U0.data[i,j]))

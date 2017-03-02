@@ -1,85 +1,153 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    qubits: <input type="text" id="qubits">
-    <button onclick="new_circuit()"> New Gate </button> 
-    <h4>Gates</h4>
-    name: <input type="text" name="g_types" value="Hadamard" disabled>
-    target: <input type="text" name="g_targets">
-    control: <input type="text" name="g_controls" disabled> <br>
-
-    name: <input type="text" name="g_types" value="SQRTNOT" disabled>
-    target: <input type="text" name="g_targets">
-    control: <input type="text" name="g_controls" disabled=""> <br>
-
-    name: <input type="text" name="g_types" value="CNOT" disabled>
-    target: <input type="text" name="g_targets">
-    control: <input type="text" name="g_controls"> <br>
-
-    name: <input type="text" name="g_types" value="CSIGN" disabled>
-    target: <input type="text" name="g_targets">
-    control: <input type="text" name="g_controls"> <br>
-
-    name: <input type="text" name="g_types" value="BERKELEY" disabled>
-    target: <input type="text" name="g_targets">
-    control: <input type="text" name="g_controls" disabled> <br>
-
-    <button onclick="send()"> Add Gate </button>
-
-    <h4>SWAP Gates</h4>
-    type: <input type="text" name="s_types" value="SWAPALPHA" disabled>
-    target: <input type="text" name="s_targets">
-    angle (pi/): <input type="text" name="s_angle"> <br>
-
-    type: <input type="text" name="s_types" value="SWAP" disabled>
-    target: <input type="text" name="s_targets">
-    angle (pi/): <input type="text" name="s_angle" disabled> <br>
-
-    type: <input type="text" name="s_types" value="ISWAP" disabled>
-    target: <input type="text" name="s_targets">
-    angle (pi/): <input type="text" name="s_angle" disabled> <br>
-
-    type: <input type="text" name="s_types" value="SQRTISWAP" disabled>
-    target: <input type="text" name="s_targets">
-    angle (pi/): <input type="text" name="s_angle" disabled> <br>
-
-    type: <input type="text" name="s_types" value="SQRTSWAP" disabled>
-    target: <input type="text" name="s_targets">
-    angle (pi/): <input type="text" name="s_angle" disabled> <br>
-
-    <button onclick="new_swap()"> Add SWAP </button>
-
-
-    <h4>Rotations</h4>
-    type: <input type="text" name="r_types" value="RX" disabled>
-    target: <input type="text" name="r_targets">
-    angle (pi/): <input type="text" name="r_angle"> <br>
-
-    type: <input type="text" name="r_types" value="RY" disabled>
-    target: <input type="text" name="r_targets">
-    angle (pi/): <input type="text" name="r_angle"> <br>
-
-    type: <input type="text" name="r_types" value="RZ" disabled>
-    target: <input type="text" name="r_targets">
-    angle (pi/): <input type="text" name="r_angle"> <br>
-
-    type: <input type="text" name="r_types" value="PHASEGATE" disabled>
-    target: <input type="text" name="r_targets">
-    angle (pi/): <input type="text" name="r_angle"> <br>
-
-    type: <input type="text" name="r_types" value="GLOBALPHASE" disabled>
-    target: <input type="text" name="r_targets">
-    angle (pi/): <input type="text" name="r_angle"> <br>
-
-    <button onclick="new_rotation()"> Add Rotation </button>
-
-
+    <div class="row">
+        <div class="col-lg-3">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Number of qubits" id="qubits">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" onclick="new_circuit()">New Gate</button>
+            </span>
+          </div>
+        </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4"><h4><strong>Gates</strong></h4></div>
+      <div class="col-sm-4"><h4><strong>SWAP Gates</strong></h4></div>
+      <div class="col-sm-4"><h4><strong>Rotations</strong></h4></div>
+    </div>
+    <div class="row"> 
+      <div class="col-sm-4">
+        <table class="table table-sm table-bordered">          
+            <th class="col-xs-2">Name</th>
+            <th class="col-xs-1">Target</th>
+            <th class="col-xs-1">Control</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input class="form-control input-sm" type="text" name="g_types" value="Hadamard" disabled></td>
+              <td><input class="form-control input-sm" type="text" name="g_targets"></td>
+              <td><input class="form-control input-sm" type="text" name="g_controls" disabled></td>
+            </tr>
+            <tr>
+              <td><input class="form-control input-sm" type="text" name="g_types" value="SQRTNOT" disabled></td>
+              <td><input class="form-control input-sm" type="text" name="g_targets">
+              <td><input class="form-control input-sm" type="text" name="g_controls" disabled></td>
+            </tr>
+            <tr>
+              <td><input class="form-control input-sm" type="text" name="g_types" value="CNOT" disabled></td>
+              <td><input class="form-control input-sm" type="text" name="g_targets">
+              <td><input class="form-control input-sm" type="text" name="g_controls"></td>
+            </tr>
+            <tr>
+              <td><input class="form-control input-sm" type="text" name="g_types" value="CSIGN" disabled></td>
+              <td><input class="form-control input-sm" type="text" name="g_targets">
+              <td><input class="form-control input-sm" type="text" name="g_controls"></td>
+            </tr>
+            <tr>
+              <td><input class="form-control input-sm" type="text" name="g_types" value="BERKELEY" disabled></td>
+              <td><input class="form-control input-sm" type="text" name="g_targets">
+              <td><input class="form-control input-sm" type="text" name="g_controls" disabled></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-sm-4">
+        <table class="table table-sm table-bordered">          
+            <th class="col-xs-2">Type</th>
+            <th class="col-xs-1">Target</th>
+            <th class="col-xs-1">angle (pi/)</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input class="form-control input-sm" type="text" name="s_types" value="SWAPALPHA" disabled></td>
+              <td><input class="form-control input-sm" type="text" name="s_targets"></td>
+              <td><input class="form-control input-sm" type="text" name="s_angle"></td>
+            </tr>
+            <tr>
+              <td><input class="form-control input-sm" type="text" name="s_types" value="SWAP" disabled></td>
+              <td><input class="form-control input-sm" type="text" name="s_targets">
+              <td><input class="form-control input-sm" type="text" name="s_angle" disabled></td>
+            </tr>
+            <tr>
+              <td><input class="form-control input-sm" type="text" name="s_types" value="ISWAP" disabled></td>
+              <td><input class="form-control input-sm" type="text" name="s_targets">
+              <td><input class="form-control input-sm" type="text" name="s_angle" disabled></td>
+            </tr>
+            <tr>
+              <td><input class="form-control input-sm" type="text" name="s_types" value="SQRTISWAP" disabled></td>
+              <td><input class="form-control input-sm" type="text" name="s_targets">
+              <td><input class="form-control input-sm" type="text" name="s_angle" disabled></td>
+            </tr>
+            <tr>
+              <td><input class="form-control input-sm" type="text" name="s_types" value="SQRTSWAP" disabled></td>
+              <td><input class="form-control input-sm" type="text" name="s_targets">
+              <td><input class="form-control input-sm" type="text" name="s_angle" disabled></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col-sm-4">
+        <table class="table table-sm table-bordered">          
+            <th class="col-xs-2">Type</th>
+            <th class="col-xs-1">Target</th>
+            <th class="col-xs-1">angle (pi/)</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input class="form-control input-sm" type="text" name="r_types" value="RX" disabled></td>
+              <td><input class="form-control input-sm" type="text" name="r_targets"></td>
+              <td><input class="form-control input-sm" type="text" name="r_angle"></td>
+            </tr>
+            <tr>
+              <td><input class="form-control input-sm" type="text" name="r_types" value="RY" disabled></td>
+              <td><input class="form-control input-sm" type="text" name="r_targets">
+              <td><input class="form-control input-sm" type="text" name="r_angle"></td>
+            </tr>
+            <tr>
+              <td><input class="form-control input-sm" type="text" name="r_types" value="RZ" disabled></td>
+              <td><input class="form-control input-sm" type="text" name="r_targets">
+              <td><input class="form-control input-sm" type="text" name="r_angle"></td>
+            </tr>
+            <tr>
+              <td><input class="form-control input-sm" type="text" name="r_types" value="PHASEGATE" disabled></td>
+              <td><input class="form-control input-sm" type="text" name="r_targets">
+              <td><input class="form-control input-sm" type="text" name="r_angle"></td>
+            </tr>
+            <tr>
+              <td><input class="form-control input-sm" type="text" name="r_types" value="GLOBALPHASE" disabled></td>
+              <td><input class="form-control input-sm" type="text" name="r_targets">
+              <td><input class="form-control input-sm" type="text" name="r_angle"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4"><button class="btn btn-default" onclick="send()"> Add Gate </button></div>
+      <div class="col-sm-4"><button class="btn btn-default" onclick="new_swap()"> Add SWAP </button></div>
+      <div class="col-sm-4"><button class="btn btn-default" onclick="new_rotation()"> Add Rotation </button></div>
+    </div>
     <hr>
-    index: <input type="text" id="gate_ind"> 
-    <button onclick="remove_gate()"> Remove gate by index</button> 
-    <br>
-    <table id="result"></table>
-    <img id="image"></img>
+    <div class="row">
+        <div class="col-lg-4">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Index" id="gate_ind">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" onclick="remove_gate()">Remove gate by index</button>
+            </span>
+          </div>
+        </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <img id="image"></img>
+      </div>
+      <div class="col-sm-8">
+        <table class="table table-sm table-bordered" id="result"></table>
+      </div>
+    </div>
+
 {% endblock %}
 
 {% block script %}
@@ -108,7 +176,7 @@
               if ($("#qubits").val() == 1){
                 n = 2;
               } else {
-                n = Math.pow($("#qubits").val(), 2)
+                n = Math.pow(2, $("#qubits").val())
               }
               var i = 0;
 
@@ -153,7 +221,7 @@
                 if ($("#qubits").val() == 1){
                   n = 2;
                 } else {
-                  n = Math.pow($("#qubits").val(), 2)
+                  n = Math.pow(2, $("#qubits").val())
                 }
                 var i = 0;
 
@@ -170,7 +238,7 @@
                 if ($("#qubits").val() == 1){
                   n = 2;
                 } else {
-                  n = Math.pow($("#qubits").val(), 2)
+                  n = Math.pow(2, $("#qubits").val())
                 }
                 var i = 0;
 
@@ -220,12 +288,13 @@
               var myList = myMap['matrix'];
               var rowHtml = '';
 
+              console.log(myList)
 
               var n = 0;
               if ($("#qubits").val() == 1){
                 n = 2;
               } else {
-                n = Math.pow($("#qubits").val(), 2)
+                n = Math.pow(2, $("#qubits").val())
               }
               var i = 0;
 
@@ -287,7 +356,7 @@
               if ($("#qubits").val() == 1){
                 n = 2;
               } else {
-                n = Math.pow($("#qubits").val(), 2)
+                n = Math.pow(2, $("#qubits").val())
               }
               var i = 0;
 
@@ -345,7 +414,7 @@
               if ($("#qubits").val() == 1){
                 n = 2;
               } else {
-                n = Math.pow($("#qubits").val(), 2)
+                n = Math.pow(2, $("#qubits").val())
               }
               var i = 0;
 
