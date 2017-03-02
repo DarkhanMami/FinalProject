@@ -16,6 +16,19 @@ from qutip import *
 N = 2
 qc0 = QubitCircuit(N)
 qc0.png
+# src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
+src_file = "/home/darkhan/Final/project/qcirc.png"
+# dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
+dst_file = "/home/darkhan/Final/project/static/qcirc.png"
+if os.path.exists(dst_file):
+    os.remove(dst_file)
+# shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
+if os.path.exists(src_file):
+    shutil.move(src_file, "/home/darkhan/Final/project/static/")
+
+if os.path.exists(src_file):
+    os.remove(src_file)
+
 
 
 @csrf_exempt
@@ -25,7 +38,8 @@ def new_circuit(request):
     global N
     N = int(qubits)
     qc0 = QubitCircuit(N)
-    qc0.png
+    if N != 1:
+        qc0.png
     matrix = []
     # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
     src_file = "/home/darkhan/Final/project/qcirc.png"
@@ -34,7 +48,11 @@ def new_circuit(request):
     if os.path.exists(dst_file):
         os.remove(dst_file)
     # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
-    shutil.move(src_file, "/home/darkhan/Final/project/static/")
+    if os.path.exists(src_file):
+        shutil.move(src_file, "/home/darkhan/Final/project/static/")
+
+    if os.path.exists(src_file):
+        os.remove(src_file)
 
     return JsonResponse({
         "matrix": matrix
@@ -109,8 +127,12 @@ def calculate(request):
     U0 = gate_sequence_product(U_list0)
     matrix = []
 
-    for i in range(0, N**2):
-       for j in range(0, N**2):
+    if N == 1:
+        tmp = 2
+    else:
+        tmp = N**2
+    for i in range(0, tmp):
+       for j in range(0, tmp):            
             matrix.append(str(U0.data[i,j]))
 
     # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
@@ -144,22 +166,77 @@ def new_rotation(request):
         name = types[i]
         target = targets[i]
         angle = angles[i]
-        print name
-        print target
-        print angle
-
-        if target != '' and angle != '':             
-            qc0.add_gate(name, int(target), None, pi/int(angle), r"\pi/"+str(angle))
+        if target != '' and angle != '':
+            tgets = []
+            tgets.append(int(target)) 
+            qc0.add_gate(name, tgets, None, pi/int(angle), r"\pi/"+str(angle))
 
 
     qc0.png
     U_list0 = qc0.propagators()
     U0 = gate_sequence_product(U_list0)
-    print U0
     matrix = []
 
-    for i in range(0, N**2):
-       for j in range(0, N**2):
+    if N == 1:
+        tmp = 2
+    else:
+        tmp = N**2
+    for i in range(0, tmp):
+       for j in range(0, tmp):            
+            matrix.append(str(U0.data[i,j]))
+
+    # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
+    src_file = "/home/darkhan/Final/project/qcirc.png"
+    # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
+    dst_file = "/home/darkhan/Final/project/static/qcirc.png"
+    if os.path.exists(dst_file):
+        os.remove(dst_file)
+    # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
+    shutil.move(src_file, "/home/darkhan/Final/project/static/")
+    
+    if os.path.exists(src_file):
+        os.remove(src_file)
+
+    return JsonResponse({
+        "matrix": matrix
+    })
+
+
+
+@csrf_exempt
+def new_swap(request):
+    types = request.POST.getlist('types[]')
+    targets = request.POST.getlist('targets[]')
+    angles = request.POST.getlist('angles[]')
+    total = len(types)
+    global qc0
+    global N
+
+    for i in range(total):
+        name = types[i]
+        target = targets[i]
+        angle = angles[i]
+        if target != '' and angle != '':
+            tgets = []
+            tgets.append(int(target))   
+            qc0.add_gate(name, tgets, None, pi/int(angle), r"\pi/"+str(angle))
+        elif target != '' and angle == '':
+            tgets = []
+            tgets.append(int(target))      
+            qc0.add_gate(name, tgets, None)
+
+
+    qc0.png
+    U_list0 = qc0.propagators()
+    U0 = gate_sequence_product(U_list0)
+    matrix = []
+
+    if N == 1:
+        tmp = 2
+    else:
+        tmp = N**2
+    for i in range(0, tmp):
+       for j in range(0, tmp):            
             matrix.append(str(U0.data[i,j]))
 
     # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")

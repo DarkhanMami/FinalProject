@@ -6,13 +6,49 @@
     <h4>Gates</h4>
     name: <input type="text" name="g_types" value="Hadamard">
     target: <input type="text" name="g_targets">
-    control: <input type="text" name="g_controls"> <br>
+    control: <input type="text" name="g_controls" disabled> <br>
+
+    name: <input type="text" name="g_types" value="SQRTNOT">
+    target: <input type="text" name="g_targets">
+    control: <input type="text" name="g_controls" disabled=""> <br>
 
     name: <input type="text" name="g_types" value="CNOT">
     target: <input type="text" name="g_targets">
     control: <input type="text" name="g_controls"> <br>
 
+    name: <input type="text" name="g_types" value="CSIGN">
+    target: <input type="text" name="g_targets">
+    control: <input type="text" name="g_controls"> <br>
+
+    name: <input type="text" name="g_types" value="BERKELEY">
+    target: <input type="text" name="g_targets">
+    control: <input type="text" name="g_controls" disabled> <br>
+
     <button onclick="send()"> Add Gate </button>
+
+    <h4>SWAP Gates</h4>
+    type: <input type="text" name="s_types" value="SWAPALPHA">
+    target: <input type="text" name="s_targets">
+    angle (pi/): <input type="text" name="s_angle"> <br>
+
+    type: <input type="text" name="s_types" value="SWAP">
+    target: <input type="text" name="s_targets">
+    angle (pi/): <input type="text" name="s_angle" disabled> <br>
+
+    type: <input type="text" name="s_types" value="ISWAP">
+    target: <input type="text" name="s_targets">
+    angle (pi/): <input type="text" name="s_angle" disabled> <br>
+
+    type: <input type="text" name="s_types" value="SQRTISWAP">
+    target: <input type="text" name="s_targets">
+    angle (pi/): <input type="text" name="s_angle" disabled> <br>
+
+    type: <input type="text" name="s_types" value="SQRTSWAP">
+    target: <input type="text" name="s_targets">
+    angle (pi/): <input type="text" name="s_angle" disabled> <br>
+
+    <button onclick="new_swap()"> Add SWAP </button>
+
 
     <h4>Rotations</h4>
     type: <input type="text" name="r_types" value="RX">
@@ -24,6 +60,14 @@
     angle (pi/): <input type="text" name="r_angle"> <br>
 
     type: <input type="text" name="r_types" value="RZ">
+    target: <input type="text" name="r_targets">
+    angle (pi/): <input type="text" name="r_angle"> <br>
+
+    type: <input type="text" name="r_types" value="PHASEGATE">
+    target: <input type="text" name="r_targets">
+    angle (pi/): <input type="text" name="r_angle"> <br>
+
+    type: <input type="text" name="r_types" value="GLOBALPHASE">
     target: <input type="text" name="r_targets">
     angle (pi/): <input type="text" name="r_angle"> <br>
 
@@ -130,6 +174,35 @@
               "async": true,
               "crossDomain": true,
               "url": "http://localhost:8000/new_rotation/",
+              "method": "POST",
+              "processData": false,
+              "contentType": false,
+              "mimeType": "multipart/form-data",
+              "data": form
+            };
+
+            $.ajax(settings).done(function (response) {
+              $("#result").html(response);
+              $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
+            });
+        }
+
+        function new_swap() {
+            var form = new FormData();
+            $('input[name=s_types]').each(function(i, v) {
+                form.append("types[]", v.value);
+            });
+            $('input[name=s_targets]').each(function(i, v) {
+                form.append("targets[]", v.value);
+            });
+            $('input[name=s_angle]').each(function(i, v) {
+                form.append("angles[]", v.value);
+            });
+
+            var settings = {
+              "async": true,
+              "crossDomain": true,
+              "url": "http://localhost:8000/new_swap/",
               "method": "POST",
               "processData": false,
               "contentType": false,
