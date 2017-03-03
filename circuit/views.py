@@ -114,9 +114,19 @@ def calculate(request):
         tgets = []
         ctrols = []
         if target != '':
-            tgets.append(int(target))
+            if ',' in str(target):
+                tgets = str(target).split(',')
+                for i in range(len(tgets)):
+                    tgets[i] = int(tgets[i])
+            else:
+                tgets.append(int(target))
             if control != '':
-                ctrols.append(int(control))
+                if ',' in str(control):
+                    ctrols = str(control).split(',')
+                    for i in range(len(ctrols)):
+                        ctrols[i] = int(ctrols[i])
+                else:
+                    ctrols.append(int(control))
                 qc0.add_gate(name, targets=tgets, controls=ctrols)
             else:
                 qc0.add_gate(name, targets=tgets)
@@ -167,7 +177,12 @@ def new_rotation(request):
         angle = angles[i]
         if target != '' and angle != '':
             tgets = []
-            tgets.append(int(target)) 
+            if ',' in str(target):
+                tgets = str(target).split(',')
+                for i in range(len(tgets)):
+                    tgets[i] = int(tgets[i])
+            else:
+                tgets.append(int(target))
             qc0.add_gate(name, tgets, None, pi/int(angle), r"\pi/"+str(angle))
 
 
@@ -215,11 +230,21 @@ def new_swap(request):
         angle = angles[i]
         if target != '' and angle != '':
             tgets = []
-            tgets.append(int(target))   
+            if ',' in str(target):
+                tgets = str(target).split(',')
+                for i in range(len(tgets)):
+                    tgets[i] = int(tgets[i])
+            else:
+                tgets.append(int(target))   
             qc0.add_gate(name, tgets, None, pi/int(angle), r"\pi/"+str(angle))
         elif target != '' and angle == '':
             tgets = []
-            tgets.append(int(target))      
+            if ',' in str(target):
+                tgets = str(target).split(',')
+                for i in range(len(tgets)):
+                    tgets[i] = int(tgets[i])
+            else:
+                tgets.append(int(target))        
             qc0.add_gate(name, tgets, None)
 
 
