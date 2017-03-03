@@ -25,7 +25,7 @@
           </thead>
           <tbody>
             <tr>
-              <td><input style="font-size:10px" class="form-control input-sm" type="text" name="g_types" value="Hadamard" disabled></td>
+              <td><input style="font-size:10px" class="form-control input-sm" type="text" name="g_types" value="HADAMARD" disabled></td>
               <td><input style="font-size:10px" class="form-control input-sm" type="text" name="g_targets"></td>
               <td><input style="font-size:10px" class="form-control input-sm" type="text" name="g_controls" disabled></td>
             </tr>
@@ -135,10 +135,12 @@
             <input type="text" class="form-control" placeholder="Index" id="gate_ind">
             <span class="input-group-btn">
               <button class="btn btn-default" type="button" onclick="remove_gate()">Remove gate by index</button>
+              <button class="btn btn-default" type="button" onclick="find_adj_gates()">Find adjacent gates</button>
             </span>
           </div>
         </div>
     </div>
+    <br>
     <div class="row">
       <div class="col-sm-4">
         <img id="image"></img>
@@ -245,7 +247,15 @@
                 for (row = 0; row < n; row++) {
                   rowHtml+='<tr>';
                   for (col = 0; col < n; col++) {
-                    rowHtml+='<td>'+myList[i]+'</td>';
+                    var str = '';
+                    var str_int;
+                    if (myList[i].includes('+0j')) {
+                      str = myList[i].replace('+0j', '');
+                      str_int = parseFloat(str).toFixed(2);
+                    } else {
+                      str_int = myList[i];
+                    }
+                    rowHtml+='<td>'+str_int+'</td>';
                     i++;
                   }
                   rowHtml+='</tr>';
@@ -301,11 +311,31 @@
               for (row = 0; row < n; row++) {
                 rowHtml+='<tr>';
                 for (col = 0; col < n; col++) {
-                  rowHtml+='<td>'+myList[i]+'</td>';
+                  var str = '';
+                  var str_int;
+                  if (myList[i].includes('+0j')) {
+                    str = myList[i].replace('+0j', '').replace('(', '').replace(')','');
+                    console.log(str);
+                    str_int = parseFloat(str).toFixed(2);
+                  } else if (myList[i] == '0j') {
+                    str_int = '0';
+                  } else {
+                    str_int = myList[i];
+                  }
+                  rowHtml+='<td>'+str_int+'</td>';
                   i++;
                 }
                 rowHtml+='</tr>';
               }
+
+              // for (row = 0; row < n; row++) {
+              //   rowHtml+='<tr>';
+              //   for (col = 0; col < n; col++) {
+              //     rowHtml+='<td>'+myList[i]+'</td>';
+              //     i++;
+              //   }
+              //   rowHtml+='</tr>';
+              // }
               
 
               $("#result").html(rowHtml);
@@ -363,7 +393,18 @@
               for (row = 0; row < n; row++) {
                 rowHtml+='<tr>';
                 for (col = 0; col < n; col++) {
-                  rowHtml+='<td>'+myList[i]+'</td>';
+                  var str = '';
+                  var str_int;
+                  if (myList[i].includes('+0j')) {
+                    str = myList[i].replace('+0j', '').replace('(', '').replace(')','');
+                    console.log(str);
+                    str_int = parseFloat(str).toFixed(2);
+                  } else if (myList[i] == '0j') {
+                    str_int = '0';
+                  } else {
+                    str_int = myList[i];
+                  }
+                  rowHtml+='<td>'+str_int+'</td>';
                   i++;
                 }
                 rowHtml+='</tr>';
@@ -421,7 +462,18 @@
               for (row = 0; row < n; row++) {
                 rowHtml+='<tr>';
                 for (col = 0; col < n; col++) {
-                  rowHtml+='<td>'+myList[i]+'</td>';
+                  var str = '';
+                  var str_int;
+                  if (myList[i].includes('+0j')) {
+                    str = myList[i].replace('+0j', '').replace('(', '').replace(')','');
+                    console.log(str);
+                    str_int = parseFloat(str).toFixed(2);
+                  } else if (myList[i] == '0j') {
+                    str_int = '0';
+                  } else {
+                    str_int = myList[i];
+                  }
+                  rowHtml+='<td>'+str_int+'</td>';
                   i++;
                 }
                 rowHtml+='</tr>';
@@ -436,6 +488,61 @@
               $('input[name=s_angle]').each(function(i, v) {
                   v.value = '';
               });
+
+            });
+        }
+
+        function find_adj_gates() {
+            var form = new FormData();
+
+            var settings = {
+              "async": true,
+              "crossDomain": true,
+              "url": "http://localhost:8000/find_adj_gates/",
+              "method": "POST",
+              "processData": false,
+              "contentType": false,
+              "mimeType": "multipart/form-data",
+              "data": form
+            };
+
+            $.ajax(settings).done(function (response) {
+              var myMap = JSON.parse(response);
+              var myList = myMap['matrix'];
+              var rowHtml = '';
+
+
+              var n = 0;
+              if ($("#qubits").val() == 1){
+                n = 2;
+              } else {
+                n = Math.pow(2, $("#qubits").val())
+              }
+              var i = 0;
+
+              for (row = 0; row < n; row++) {
+                rowHtml+='<tr>';
+                for (col = 0; col < n; col++) {
+                  var str = '';
+                  var str_int;
+                  if (myList[i].includes('+0j')) {
+                    str = myList[i].replace('+0j', '').replace('(', '').replace(')','');
+                    console.log(str);
+                    str_int = parseFloat(str).toFixed(2);
+                  } else if (myList[i] == '0j') {
+                    str_int = '0';
+                  } else {
+                    str_int = myList[i];
+                  }
+                  rowHtml+='<td>'+str_int+'</td>';
+                  i++;
+                }
+                rowHtml+='</tr>';
+              }
+              
+
+              $("#result").html(rowHtml);
+              $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());             
 
             });
         }

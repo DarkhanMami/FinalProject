@@ -47,9 +47,8 @@
 
 \begin{document}
 \Qcircuit @C=1cm @R=1cm {
- & \qw \\ 
- & \qw \\ 
- & \qw \\ 
- & \qw \\ 
+ &  \qw  &  \targ  &  \qw  & \qw \\ 
+ &  \multigate{1}{{\rm SWAP}}  &  \ctrl{-1}  &  \multigate{1}{{\rm SWAP}}  & \qw \\ 
+ &  \ghost{{\rm SWAP}}  &  \qw  &  \ghost{{\rm SWAP}}  & \qw \\ 
 }
 \end{document}
