@@ -18,7 +18,7 @@
     </div>
     <div class="row"> 
       <div class="col-sm-4">
-        <table class="table table-sm table-bordered" style="font-size:12px">          
+        <table class="table table-sm table-bordered table-condensed" style="font-size:12px">          
             <th class="col-xs-2">Name</th>
             <th class="col-xs-1">Target</th>
             <th class="col-xs-1">Control</th>
@@ -63,7 +63,7 @@
         </table>
       </div>
       <div class="col-sm-4">
-        <table class="table table-sm table-bordered" style="font-size:12px">          
+        <table class="table table-sm table-bordered table-condensed" style="font-size:12px">          
             <th class="col-xs-2">Type</th>
             <th class="col-xs-1">Target</th>
             <th class="col-xs-1">angle (pi/)</th>
@@ -108,7 +108,7 @@
         </table>
       </div>
       <div class="col-sm-4">
-        <table class="table table-sm table-bordered" style="font-size:12px">          
+        <table class="table table-sm table-bordered table-condensed" style="font-size:12px">          
             <th class="col-xs-2">Type</th>
             <th class="col-xs-1">Target</th>
             <th class="col-xs-1">angle (pi/)</th>
@@ -154,9 +154,38 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-4"><button class="btn btn-default" onclick="send()"> Add Gate </button></div>
-      <div class="col-sm-4"><button class="btn btn-default" onclick="new_swap()"> Add SWAP </button></div>
-      <div class="col-sm-4"><button class="btn btn-default" onclick="new_rotation()"> Add Rotation </button></div>
+      <div class="col-sm-4">
+        <div class="input-group">
+          <span class="input-group-btn">
+            <button class="btn btn-default" onclick="send()"> Add Gate </button>
+            <button class="btn btn-default" type="button" disabled>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</button>
+            <button class="btn btn-default" onclick="insert_gate()" type="button">Insert the gate at</button>
+          </span>
+          <input type="text" class="form-control" placeholder="position..." id="gate_pos">
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div class="input-group">
+          <span class="input-group-btn">
+            <button class="btn btn-default" onclick="new_swap()"> Add SWAP </button>
+            <button class="btn btn-default" type="button" disabled>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</button>
+            <button class="btn btn-default" onclick="insert_swap()" type="button">Insert the SWAP at</button>
+          </span>
+          <input type="text" class="form-control" placeholder="position..." id="swap_pos">
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div class="input-group">
+          <span class="input-group-btn">
+            <button class="btn btn-default" onclick="new_rotation()"> Add Rotation </button>
+            <button class="btn btn-default" type="button" disabled>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</button>
+            <button class="btn btn-default" onclick="insert_rotation()" type="button">Insert the rotation at</button>
+          </span>
+          <input type="text" class="form-control" placeholder="position..." id="rot_pos">
+        </div>
+      </div>
     </div>
     <hr>
     <div class="row">
@@ -356,17 +385,7 @@
                   i++;
                 }
                 rowHtml+='</tr>';
-              }
-
-              // for (row = 0; row < n; row++) {
-              //   rowHtml+='<tr>';
-              //   for (col = 0; col < n; col++) {
-              //     rowHtml+='<td>'+myList[i]+'</td>';
-              //     i++;
-              //   }
-              //   rowHtml+='</tr>';
-              // }
-              
+              }              
 
               $("#result").html(rowHtml);
 
@@ -380,6 +399,82 @@
               $('input[name=g_controls]').each(function(i, v) {
                   v.value = '';
               });
+            });
+        }
+
+        function insert_gate() {
+            var form = new FormData();
+            $('input[name=g_types]').each(function(i, v) {
+                form.append("types[]", v.value);
+            });
+            $('input[name=g_targets]').each(function(i, v) {
+                form.append("targets[]", v.value);
+            });
+            $('input[name=g_controls]').each(function(i, v) {
+                form.append("controls[]", v.value);
+            });
+            
+            form.append("pos", $("#gate_pos").val())
+
+
+            var settings = {
+              "async": true,
+              "crossDomain": true,
+              "url": "http://localhost:8000/insert_gate/",
+              "method": "POST",
+              "processData": false,
+              "contentType": false,
+              "mimeType": "multipart/form-data",
+              "data": form
+            };
+
+            $.ajax(settings).done(function (response) {
+              var myMap = JSON.parse(response);
+              var myList = myMap['matrix'];
+              var rowHtml = '';
+
+              console.log(myList)
+
+              var n = 0;
+              if ($("#qubits").val() == 1){
+                n = 2;
+              } else {
+                n = Math.pow(2, $("#qubits").val())
+              }
+              var i = 0;
+
+              for (row = 0; row < n; row++) {
+                rowHtml+='<tr>';
+                for (col = 0; col < n; col++) {
+                  var str = '';
+                  var str_int;
+                  if (myList[i].includes('+0j')) {
+                    str = myList[i].replace('+0j', '').replace('(', '').replace(')','');
+                    console.log(str);
+                    str_int = parseFloat(str).toFixed(2);
+                  } else if (myList[i] == '0j') {
+                    str_int = '0';
+                  } else {
+                    str_int = myList[i];
+                  }
+                  rowHtml+='<td>'+str_int+'</td>';
+                  i++;
+                }
+                rowHtml+='</tr>';
+              }
+              
+
+              $("#result").html(rowHtml);
+
+              $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
+              $('input[name=g_targets]').each(function(i, v) {
+                  v.value = '';
+              });
+              $('input[name=g_controls]').each(function(i, v) {
+                  v.value = '';
+              });
+              $("#gate_pos").val('');
+
             });
         }
 
@@ -452,6 +547,80 @@
             });
         }
 
+        function insert_rotation() {
+            var form = new FormData();
+            $('input[name=r_types]').each(function(i, v) {
+                form.append("types[]", v.value);
+            });
+            $('input[name=r_targets]').each(function(i, v) {
+                form.append("targets[]", v.value);
+            });
+            $('input[name=r_angle]').each(function(i, v) {
+                form.append("angles[]", v.value);
+            });
+
+            form.append("pos", $("#rot_pos").val())
+
+            var settings = {
+              "async": true,
+              "crossDomain": true,
+              "url": "http://localhost:8000/insert_rotation/",
+              "method": "POST",
+              "processData": false,
+              "contentType": false,
+              "mimeType": "multipart/form-data",
+              "data": form
+            };
+
+            $.ajax(settings).done(function (response) {
+              var myMap = JSON.parse(response);
+              var myList = myMap['matrix'];
+              var rowHtml = '';
+
+
+              var n = 0;
+              if ($("#qubits").val() == 1){
+                n = 2;
+              } else {
+                n = Math.pow(2, $("#qubits").val())
+              }
+              var i = 0;
+
+              for (row = 0; row < n; row++) {
+                rowHtml+='<tr>';
+                for (col = 0; col < n; col++) {
+                  var str = '';
+                  var str_int;
+                  if (myList[i].includes('+0j')) {
+                    str = myList[i].replace('+0j', '').replace('(', '').replace(')','');
+                    console.log(str);
+                    str_int = parseFloat(str).toFixed(2);
+                  } else if (myList[i] == '0j') {
+                    str_int = '0';
+                  } else {
+                    str_int = myList[i];
+                  }
+                  rowHtml+='<td>'+str_int+'</td>';
+                  i++;
+                }
+                rowHtml+='</tr>';
+              }
+              
+
+              $("#result").html(rowHtml);
+              $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
+              $('input[name=r_targets]').each(function(i, v) {
+                  v.value = '';
+              });
+              $('input[name=r_angle]').each(function(i, v) {
+                  v.value = '';
+              });
+
+              $("#rot_pos").val('');
+
+            });
+        }
+
         function new_swap() {
             var form = new FormData();
             $('input[name=s_types]').each(function(i, v) {
@@ -518,6 +687,80 @@
               $('input[name=s_angle]').each(function(i, v) {
                   v.value = '';
               });
+
+            });
+        }
+
+        function insert_swap() {
+            var form = new FormData();
+            $('input[name=s_types]').each(function(i, v) {
+                form.append("types[]", v.value);
+            });
+            $('input[name=s_targets]').each(function(i, v) {
+                form.append("targets[]", v.value);
+            });
+            $('input[name=s_angle]').each(function(i, v) {
+                form.append("angles[]", v.value);
+            });
+
+            form.append("pos", $("#swap_pos").val());
+
+            var settings = {
+              "async": true,
+              "crossDomain": true,
+              "url": "http://localhost:8000/insert_swap/",
+              "method": "POST",
+              "processData": false,
+              "contentType": false,
+              "mimeType": "multipart/form-data",
+              "data": form
+            };
+
+            $.ajax(settings).done(function (response) {
+              var myMap = JSON.parse(response);
+              var myList = myMap['matrix'];
+              var rowHtml = '';
+
+
+              var n = 0;
+              if ($("#qubits").val() == 1){
+                n = 2;
+              } else {
+                n = Math.pow(2, $("#qubits").val())
+              }
+              var i = 0;
+
+              for (row = 0; row < n; row++) {
+                rowHtml+='<tr>';
+                for (col = 0; col < n; col++) {
+                  var str = '';
+                  var str_int;
+                  if (myList[i].includes('+0j')) {
+                    str = myList[i].replace('+0j', '').replace('(', '').replace(')','');
+                    console.log(str);
+                    str_int = parseFloat(str).toFixed(2);
+                  } else if (myList[i] == '0j') {
+                    str_int = '0';
+                  } else {
+                    str_int = myList[i];
+                  }
+                  rowHtml+='<td>'+str_int+'</td>';
+                  i++;
+                }
+                rowHtml+='</tr>';
+              }
+              
+
+              $("#result").html(rowHtml);
+              $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
+              $('input[name=s_targets]').each(function(i, v) {
+                  v.value = '';
+              });
+              $('input[name=s_angle]').each(function(i, v) {
+                  v.value = '';
+              });
+
+              $("#swap_pos").val('');
 
             });
         }

@@ -97,6 +97,73 @@ def remove_gate(request):
 
 
 @csrf_exempt
+def insert_gate(request):
+    pos = request.POST.get('pos')
+    types = request.POST.getlist('types[]')
+    targets = request.POST.getlist('targets[]')
+    controls = request.POST.getlist('controls[]')
+    total = len(types)
+    global qc0
+    global N
+
+    for i in range(total):
+        name = types[i]
+        if name == 'HADAMARD':
+            name = 'SNOT'
+        target = targets[i]
+        control = controls[i]
+        tgets = []
+        ctrols = []
+        if target != '':
+            if ',' in str(target):
+                tgets = str(target).split(',')
+                for i in range(len(tgets)):
+                    tgets[i] = int(tgets[i])
+            else:
+                tgets.append(int(target))
+            if control != '':
+                if ',' in str(control):
+                    ctrols = str(control).split(',')
+                    for i in range(len(ctrols)):
+                        ctrols[i] = int(ctrols[i])
+                else:
+                    ctrols.append(int(control))
+                qc0.gates.insert(int(pos), Gate(name, targets=tgets, controls=ctrols))
+            else:
+                qc0.gates.insert(int(pos), Gate(name, targets=tgets))
+
+
+    qc0.png
+    U_list0 = qc0.propagators()
+    U0 = gate_sequence_product(U_list0)
+    matrix = []
+
+    if N == 1:
+        tmp = 2
+    else:
+        tmp = 2**N
+    for i in range(0, tmp):
+       for j in range(0, tmp):            
+            matrix.append(str(U0.data[i,j]))
+
+    # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
+    src_file = "/home/darkhan/Final/project/qcirc.png"
+    # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
+    dst_file = "/home/darkhan/Final/project/static/qcirc.png"
+    if os.path.exists(dst_file):
+        os.remove(dst_file)
+    # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
+    shutil.move(src_file, "/home/darkhan/Final/project/static/")
+    
+    if os.path.exists(src_file):
+        os.remove(src_file)
+
+    return JsonResponse({
+        "matrix": matrix
+    })
+
+
+@csrf_exempt
 def calculate(request):
     types = request.POST.getlist('types[]')
     targets = request.POST.getlist('targets[]')
@@ -130,6 +197,61 @@ def calculate(request):
                 qc0.add_gate(name, targets=tgets, controls=ctrols)
             else:
                 qc0.add_gate(name, targets=tgets)
+
+
+    qc0.png
+    U_list0 = qc0.propagators()
+    U0 = gate_sequence_product(U_list0)
+    matrix = []
+
+    if N == 1:
+        tmp = 2
+    else:
+        tmp = 2**N
+    for i in range(0, tmp):
+       for j in range(0, tmp):            
+            matrix.append(str(U0.data[i,j]))
+
+    # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
+    src_file = "/home/darkhan/Final/project/qcirc.png"
+    # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
+    dst_file = "/home/darkhan/Final/project/static/qcirc.png"
+    if os.path.exists(dst_file):
+        os.remove(dst_file)
+    # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
+    shutil.move(src_file, "/home/darkhan/Final/project/static/")
+    
+    if os.path.exists(src_file):
+        os.remove(src_file)
+
+    return JsonResponse({
+        "matrix": matrix
+    })
+
+
+@csrf_exempt
+def insert_rotation(request):
+    pos = request.POST.get('pos')
+    types = request.POST.getlist('types[]')
+    targets = request.POST.getlist('targets[]')
+    angles = request.POST.getlist('angles[]')
+    total = len(types)
+    global qc0
+    global N
+
+    for i in range(total):
+        name = types[i]
+        target = targets[i]
+        angle = angles[i]
+        if target != '' and angle != '':
+            tgets = []
+            if ',' in str(target):
+                tgets = str(target).split(',')
+                for i in range(len(tgets)):
+                    tgets[i] = int(tgets[i])
+            else:
+                tgets.append(int(target))
+            qc0.gates.insert(int(pos), Gate(name, tgets, None, pi/int(angle), r"\pi/"+str(angle)))
 
 
     qc0.png
@@ -214,6 +336,70 @@ def new_rotation(request):
     return JsonResponse({
         "matrix": matrix
     })
+
+@csrf_exempt
+def insert_swap(request):
+    pos = request.POST.get('pos')
+    types = request.POST.getlist('types[]')
+    targets = request.POST.getlist('targets[]')
+    angles = request.POST.getlist('angles[]')
+    total = len(types)
+    global qc0
+    global N
+
+    for i in range(total):
+        name = types[i]
+        target = targets[i]
+        angle = angles[i]
+        if target != '' and angle != '':
+            tgets = []
+            if ',' in str(target):
+                tgets = str(target).split(',')
+                for i in range(len(tgets)):
+                    tgets[i] = int(tgets[i])
+            else:
+                tgets.append(int(target))
+            qc0.gates.insert(int(pos), Gate(name, tgets, None, pi/int(angle), r"\pi/"+str(angle)))
+        elif target != '' and angle == '':
+            tgets = []
+            if ',' in str(target):
+                tgets = str(target).split(',')
+                for i in range(len(tgets)):
+                    tgets[i] = int(tgets[i])
+            else:
+                tgets.append(int(target))
+            qc0.gates.insert(int(pos), Gate(name, tgets, None))
+
+
+    qc0.png
+    U_list0 = qc0.propagators()
+    U0 = gate_sequence_product(U_list0)
+    matrix = []
+
+    if N == 1:
+        tmp = 2
+    else:
+        tmp = 2**N
+    for i in range(0, tmp):
+       for j in range(0, tmp):            
+            matrix.append(str(U0.data[i,j]))
+
+    # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
+    src_file = "/home/darkhan/Final/project/qcirc.png"
+    # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
+    dst_file = "/home/darkhan/Final/project/static/qcirc.png"
+    if os.path.exists(dst_file):
+        os.remove(dst_file)
+    # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
+    shutil.move(src_file, "/home/darkhan/Final/project/static/")
+    
+    if os.path.exists(src_file):
+        os.remove(src_file)
+
+    return JsonResponse({
+        "matrix": matrix
+    })
+
 
 @csrf_exempt
 def new_swap(request):

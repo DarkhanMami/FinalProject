@@ -11,4 +11,7 @@ urlpatterns = [
     url(r'^remove_gate/$', views.remove_gate, name='remove_gate'),
     url(r'^new_swap/$', views.new_swap, name='new_swap'),
     url(r'^find_adj_gates/$', views.find_adj_gates, name='find_adj_gates'),
+    url(r'^insert_gate/$', views.insert_gate, name='insert_gate'),
+    url(r'^insert_rotation/$', views.insert_rotation, name='insert_rotation'),
+    url(r'^insert_swap/$', views.insert_swap, name='insert_swap'),
 ]
