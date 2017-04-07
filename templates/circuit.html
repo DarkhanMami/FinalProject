@@ -7,6 +7,7 @@
             <input type="text" class="form-control" placeholder="Number of qubits" id="qubits">
             <span class="input-group-btn">
               <button class="btn btn-default" type="button" onclick="new_circuit()">New Gate</button>
+              <button class="btn btn-default" type="button" onclick="export_dump()">Export dump</button>
             </span>
           </div>
         </div>
@@ -816,6 +817,27 @@
 
               $("#result").html(rowHtml);
               $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());             
+
+            });
+        }
+
+        function export_dump() {
+            var form = new FormData();
+
+            var settings = {
+              "async": true,
+              "crossDomain": true,
+              "url": "http://localhost:8000/export_dump/",
+              "method": "POST",
+              "processData": false,
+              "contentType": false,
+              "mimeType": "multipart/form-data",
+              "data": form
+            };
+
+            $.ajax(settings).done(function (response) {
+                console.log(reponse);
+                var myDump = JSON.parse(response);      
 
             });
         }

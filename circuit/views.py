@@ -7,6 +7,9 @@ from django.http import HttpResponse
 
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.core import serializers
+import json
+
 import matplotlib.pyplot as plt
 import numpy as np
 from IPython.display import Image
@@ -499,6 +502,16 @@ def find_adj_gates(request):
         "matrix": matrix
     })
 
+
+@csrf_exempt
+def export_dump(request):
+    global qc0
+    global N
+    temp = dict()
+    temp["circuit"] = qc0
+    return JsonResponse({
+        "dump": temp
+    })
 
 
 
