@@ -8,6 +8,9 @@ from django.http import HttpResponse
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+
 import json
 
 import matplotlib.pyplot as plt
@@ -522,7 +525,11 @@ def import_file(request):
 
     if request.method == "POST":
         saved_state = request.FILES['file']
-        qc0 = qload(saved_state)
+
+        dump_name = default_storage.save('/home/darkhan/Final/project/upload.qu', ContentFile(saved_state.read()))
+ 
+
+        qc0 = qload('upload')
 
         N = qc0.N
 
@@ -552,7 +559,8 @@ def import_file(request):
             os.remove(src_file)
 
         return JsonResponse({
-            "matrix": matrix
+            "matrix": matrix,
+            "N"     : N
         })
 
 

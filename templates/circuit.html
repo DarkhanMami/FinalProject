@@ -2,14 +2,15 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-lg-3">
+        <div class="col-lg-6">
           <div class="input-group">
             <input type="text" class="form-control" placeholder="Number of qubits" id="qubits">
             <span class="input-group-btn">
-              <button class="btn btn-default" type="button" onclick="new_circuit()">New Gate</button>
-              <button class="btn btn-default"><a href="/export_dump/">Export dump</a></button>
-               <button class="btn btn-default" type="button" onclick="import_file()">Import dump</button>
+                <button class="btn btn-default" type="button" onclick="new_circuit()">New Gate</button>
+                <button class="btn btn-default"><a href="/export_dump/">Export dump</a></button>
+                <button class="btn btn-default" type="button" onclick="import_file()">Import dump</button>                
             </span>
+            <input type="file" class="form-control" id="file" placeholder="file">
           </div>
         </div>
     </div>
@@ -311,7 +312,8 @@
                     var str = '';
                     var str_int;
                     if (myList[i].includes('+0j')) {
-                      str = myList[i].replace('+0j', '');
+                      str = myList[i].replace('+0j', '').replace('(', '').replace(')','');
+
                       str_int = parseFloat(str).toFixed(2);
                     } else {
                       str_int = myList[i];
@@ -358,8 +360,7 @@
               var myMap = JSON.parse(response);
               var myList = myMap['matrix'];
               var rowHtml = '';
-
-              console.log(myList)
+              
 
               var n = 0;
               if ($("#qubits").val() == 1){
@@ -376,7 +377,6 @@
                   var str_int;
                   if (myList[i].includes('+0j')) {
                     str = myList[i].replace('+0j', '').replace('(', '').replace(')','');
-                    console.log(str);
                     str_int = parseFloat(str).toFixed(2);
                   } else if (myList[i] == '0j') {
                     str_int = '0';
@@ -434,8 +434,7 @@
               var myMap = JSON.parse(response);
               var myList = myMap['matrix'];
               var rowHtml = '';
-
-              console.log(myList)
+              
 
               var n = 0;
               if ($("#qubits").val() == 1){
@@ -451,8 +450,7 @@
                   var str = '';
                   var str_int;
                   if (myList[i].includes('+0j')) {
-                    str = myList[i].replace('+0j', '').replace('(', '').replace(')','');
-                    console.log(str);
+                    str = myList[i].replace('+0j', '').replace('(', '').replace(')','');                  
                     str_int = parseFloat(str).toFixed(2);
                   } else if (myList[i] == '0j') {
                     str_int = '0';
@@ -523,8 +521,7 @@
                   var str = '';
                   var str_int;
                   if (myList[i].includes('+0j')) {
-                    str = myList[i].replace('+0j', '').replace('(', '').replace(')','');
-                    console.log(str);
+                    str = myList[i].replace('+0j', '').replace('(', '').replace(')','');                  
                     str_int = parseFloat(str).toFixed(2);
                   } else if (myList[i] == '0j') {
                     str_int = '0';
@@ -594,8 +591,7 @@
                   var str = '';
                   var str_int;
                   if (myList[i].includes('+0j')) {
-                    str = myList[i].replace('+0j', '').replace('(', '').replace(')','');
-                    console.log(str);
+                    str = myList[i].replace('+0j', '').replace('(', '').replace(')','');                  
                     str_int = parseFloat(str).toFixed(2);
                   } else if (myList[i] == '0j') {
                     str_int = '0';
@@ -666,8 +662,7 @@
                   var str = '';
                   var str_int;
                   if (myList[i].includes('+0j')) {
-                    str = myList[i].replace('+0j', '').replace('(', '').replace(')','');
-                    console.log(str);
+                    str = myList[i].replace('+0j', '').replace('(', '').replace(')','');                  
                     str_int = parseFloat(str).toFixed(2);
                   } else if (myList[i] == '0j') {
                     str_int = '0';
@@ -738,8 +733,7 @@
                   var str = '';
                   var str_int;
                   if (myList[i].includes('+0j')) {
-                    str = myList[i].replace('+0j', '').replace('(', '').replace(')','');
-                    console.log(str);
+                    str = myList[i].replace('+0j', '').replace('(', '').replace(')','');                  
                     str_int = parseFloat(str).toFixed(2);
                   } else if (myList[i] == '0j') {
                     str_int = '0';
@@ -801,8 +795,7 @@
                   var str = '';
                   var str_int;
                   if (myList[i].includes('+0j')) {
-                    str = myList[i].replace('+0j', '').replace('(', '').replace(')','');
-                    console.log(str);
+                    str = myList[i].replace('+0j', '').replace('(', '').replace(')','');                  
                     str_int = parseFloat(str).toFixed(2);
                   } else if (myList[i] == '0j') {
                     str_int = '0';
@@ -823,19 +816,77 @@
         }
 
         function import_file() {
+            var form = new FormData();
+            var file = document.getElementById('file').files[0];
+
+            var form = new FormData();
+            form.append("file", file);
 
             var settings = {
-              // "async": true,
-              // "crossDomain": true,
-              "url": "http://localhost:8000/import_file/",
-              "method": "POST"
-              // "processData": false,
-              // "contentType": false,
-              // "mimeType": "multipart/form-data"
-            };
+              "async": true,
+              "crossDomain": true,
+              "url": "/import_file/",
+              "method": "POST",
+              "processData": false,
+              "contentType": false,
+              "mimeType": "multipart/form-data",
+              "data": form
+            }
 
             $.ajax(settings).done(function (response) {
-                console.log(response);
+              var myMap = JSON.parse(response);
+              var myList = myMap['matrix'];
+
+
+              $("#qubits").val(myMap['N']);
+
+              var rowHtml = '';
+
+              if (myList.length < 2) {
+                var n = 0;
+                if ($("#qubits").val() == 1){
+                  n = 2;
+                } else {
+                  n = Math.pow(2, $("#qubits").val())
+                }
+                var i = 0;
+
+                for (row = 0; row < n; row++) {
+                  rowHtml+='<tr>';
+                  for (col = 0; col < n; col++) {
+                    rowHtml+='<td>'+"0"+'</td>';
+                    i++;
+                  }
+                  rowHtml+='</tr>';
+                }
+              } else {
+                var n = 0;
+                if ($("#qubits").val() == 1){
+                  n = 2;
+                } else {
+                  n = Math.pow(2, $("#qubits").val())
+                }
+                var i = 0;
+                for (row = 0; row < n; row++) {
+                  rowHtml+='<tr>';
+                  for (col = 0; col < n; col++) {
+                    var str = '';
+                    var str_int;
+                    if (myList[i].includes('+0j')) { 
+                      str = myList[i].replace('+0j', '').replace('(', '').replace(')','');               
+                      str_int = parseFloat(str).toFixed(2);
+                    } else {
+                      str_int = myList[i];
+                    }
+                    rowHtml+='<td>'+str_int+'</td>';
+                    i++;
+                  }
+                  rowHtml+='</tr>';
+                }
+              }
+
+              $("#result").html(rowHtml);
+              $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
             });
         }
 
