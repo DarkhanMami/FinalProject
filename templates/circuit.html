@@ -8,6 +8,7 @@
             <span class="input-group-btn">
               <button class="btn btn-default" type="button" onclick="new_circuit()">New Gate</button>
               <button class="btn btn-default" type="button" onclick="export_dump()">Export dump</button>
+               <button class="btn btn-default" type="button" onclick="import_file()">Import dump</button>
             </span>
           </div>
         </div>
@@ -836,9 +837,28 @@
             };
 
             $.ajax(settings).done(function (response) {
-                console.log(reponse);
-                var myDump = JSON.parse(response);      
+                // console.log(reponse);
+                // var myDump = JSON.parse(response);
+                window.location = "dump.txt";
 
+            });
+        }
+
+        function import_file() {
+            var form = new FormData();
+
+            var settings = {
+              "async": true,
+              "crossDomain": true,
+              "url": "http://localhost:8000/import_file/",
+              "method": "POST",
+              "processData": false,
+              "contentType": false,
+              "mimeType": "multipart/form-data",
+              "data": form
+            };
+
+            $.ajax(settings).done(function (response) {
             });
         }
 

@@ -506,14 +506,21 @@ def find_adj_gates(request):
 @csrf_exempt
 def export_dump(request):
     global qc0
-    global N
-    temp = dict()
-    temp["circuit"] = qc0
-    return JsonResponse({
-        "dump": temp
-    })
+    qsave(qc0, 'save_temp')
+    file_path = os.path.join('/home/darkhan/Final/project/save_temp.qu')
+    fsock = open(file_path, "rb")
+    response = HttpResponse(fsock)
+    response['Content-Disposition'] = 'attachment; filename=dump'
+    return response
 
 
+@csrf_exempt
+def import_file(request):
+    if request.method == "POST":
+        saved_state = request.FILES['file']
+        print '!!!!!!!!!!!!!!!!!!!!!!!'
+        print saved_states
+    return render(request, 'import.html')
 
 def index(request):
     return render(request, 'circuit.html')

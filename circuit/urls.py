@@ -15,4 +15,5 @@ urlpatterns = [
     url(r'^insert_rotation/$', views.insert_rotation, name='insert_rotation'),
     url(r'^insert_swap/$', views.insert_swap, name='insert_swap'),
     url(r'^export_dump/$', views.export_dump, name='export_dump'),
+    url(r'^import_file/$', views.import_file, name='import_file'),
 ]
