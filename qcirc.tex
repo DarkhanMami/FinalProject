@@ -47,8 +47,8 @@
 
 \begin{document}
 \Qcircuit @C=1cm @R=1cm {
- &  \gate{{\rm H}}  &  \qw  & \qw \\ 
- &  \qw  &  \gate{{\rm H}}  & \qw \\ 
- &  \qw  &  \qw  & \qw \\ 
+ &  \gate{{\rm H}}  &  \qw  &  \multigate{1}{{\rm BERKELEY}}  &  \qw  &  \ctrl{1}  & \qw \\ 
+ &  \qw  &  \gate{{\rm H}}  &  \ghost{{\rm BERKELEY}}  &  \targ  &  \gate{{\rm Z}}  & \qw \\ 
+ &  \qw  &  \qw  &  \qw  &  \ctrl{-1}  &  \qw  & \qw \\ 
 }
 \end{document}

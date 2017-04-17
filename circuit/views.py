@@ -24,14 +24,14 @@ qc0 = QubitCircuit(N)
 
 qc0.png
 # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
-src_file = "/home/darkhan/Final/project/qcirc.png"
+src_file = "/root/FinalProject/qcirc.png"
 # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
-dst_file = "/home/darkhan/Final/project/static/qcirc.png"
+dst_file = "/root/FinalProject/static/qcirc.png"
 if os.path.exists(dst_file):
     os.remove(dst_file)
 # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
 if os.path.exists(src_file):
-    shutil.move(src_file, "/home/darkhan/Final/project/static/")
+    shutil.move(src_file, "/root/FinalProject/static/")
 
 if os.path.exists(src_file):
     os.remove(src_file)
@@ -49,14 +49,14 @@ def new_circuit(request):
         qc0.png
     matrix = []
     # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
-    src_file = "/home/darkhan/Final/project/qcirc.png"
+    src_file = "/root/FinalProject/qcirc.png"
     # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
-    dst_file = "/home/darkhan/Final/project/static/qcirc.png"
+    dst_file = "/root/FinalProject/static/qcirc.png"
     if os.path.exists(dst_file):
         os.remove(dst_file)
     # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
     if os.path.exists(src_file):
-        shutil.move(src_file, "/home/darkhan/Final/project/static/")
+        shutil.move(src_file, "/root/FinalProject/static/")
 
     if os.path.exists(src_file):
         os.remove(src_file)
@@ -87,13 +87,13 @@ def remove_gate(request):
         print 'empty circuit'
 
     # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
-    src_file = "/home/darkhan/Final/project/qcirc.png"
+    src_file = "/root/FinalProject/qcirc.png"
     # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
-    dst_file = "/home/darkhan/Final/project/static/qcirc.png"
+    dst_file = "/root/FinalProject/static/qcirc.png"
     if os.path.exists(dst_file):
         os.remove(dst_file)
     # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
-    shutil.move(src_file, "/home/darkhan/Final/project/static/")
+    shutil.move(src_file, "/root/FinalProject/static/")
     
     if os.path.exists(src_file):
         os.remove(src_file)
@@ -154,13 +154,13 @@ def insert_gate(request):
             matrix.append(str(U0.data[i,j]))
 
     # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
-    src_file = "/home/darkhan/Final/project/qcirc.png"
+    src_file = "/root/FinalProject/qcirc.png"
     # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
-    dst_file = "/home/darkhan/Final/project/static/qcirc.png"
+    dst_file = "/root/FinalProject/static/qcirc.png"
     if os.path.exists(dst_file):
         os.remove(dst_file)
     # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
-    shutil.move(src_file, "/home/darkhan/Final/project/static/")
+    shutil.move(src_file, "/root/FinalProject/static/")
     
     if os.path.exists(src_file):
         os.remove(src_file)
@@ -220,13 +220,13 @@ def calculate(request):
             matrix.append(str(U0.data[i,j]))
 
     # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
-    src_file = "/home/darkhan/Final/project/qcirc.png"
+    src_file = "/root/FinalProject/qcirc.png"
     # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
-    dst_file = "/home/darkhan/Final/project/static/qcirc.png"
+    dst_file = "/root/FinalProject/static/qcirc.png"
     if os.path.exists(dst_file):
         os.remove(dst_file)
     # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
-    shutil.move(src_file, "/home/darkhan/Final/project/static/")
+    shutil.move(src_file, "/root/FinalProject/static/")
     
     if os.path.exists(src_file):
         os.remove(src_file)
@@ -275,13 +275,13 @@ def insert_rotation(request):
             matrix.append(str(U0.data[i,j]))
 
     # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
-    src_file = "/home/darkhan/Final/project/qcirc.png"
+    src_file = "/root/FinalProject/qcirc.png"
     # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
-    dst_file = "/home/darkhan/Final/project/static/qcirc.png"
+    dst_file = "/root/FinalProject/static/qcirc.png"
     if os.path.exists(dst_file):
         os.remove(dst_file)
     # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
-    shutil.move(src_file, "/home/darkhan/Final/project/static/")
+    shutil.move(src_file, "/root/FinalProject/static/")
     
     if os.path.exists(src_file):
         os.remove(src_file)
@@ -329,13 +329,13 @@ def new_rotation(request):
             matrix.append(str(U0.data[i,j]))
 
     # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
-    src_file = "/home/darkhan/Final/project/qcirc.png"
+    src_file = "/root/FinalProject/qcirc.png"
     # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
-    dst_file = "/home/darkhan/Final/project/static/qcirc.png"
+    dst_file = "/root/FinalProject/static/qcirc.png"
     if os.path.exists(dst_file):
         os.remove(dst_file)
     # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
-    shutil.move(src_file, "/home/darkhan/Final/project/static/")
+    shutil.move(src_file, "/root/FinalProject/static/")
     
     if os.path.exists(src_file):
         os.remove(src_file)
@@ -392,13 +392,13 @@ def insert_swap(request):
             matrix.append(str(U0.data[i,j]))
 
     # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
-    src_file = "/home/darkhan/Final/project/qcirc.png"
+    src_file = "/root/FinalProject/qcirc.png"
     # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
-    dst_file = "/home/darkhan/Final/project/static/qcirc.png"
+    dst_file = "/root/FinalProject/static/qcirc.png"
     if os.path.exists(dst_file):
         os.remove(dst_file)
     # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
-    shutil.move(src_file, "/home/darkhan/Final/project/static/")
+    shutil.move(src_file, "/root/FinalProject/static/")
     
     if os.path.exists(src_file):
         os.remove(src_file)
@@ -455,13 +455,13 @@ def new_swap(request):
             matrix.append(str(U0.data[i,j]))
 
     # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
-    src_file = "/home/darkhan/Final/project/qcirc.png"
+    src_file = "/root/FinalProject/qcirc.png"
     # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
-    dst_file = "/home/darkhan/Final/project/static/qcirc.png"
+    dst_file = "/root/FinalProject/static/qcirc.png"
     if os.path.exists(dst_file):
         os.remove(dst_file)
     # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
-    shutil.move(src_file, "/home/darkhan/Final/project/static/")
+    shutil.move(src_file, "/root/FinalProject/static/")
     
     if os.path.exists(src_file):
         os.remove(src_file)
@@ -491,13 +491,13 @@ def find_adj_gates(request):
             matrix.append(str(U0.data[i,j]))
 
     # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
-    src_file = "/home/darkhan/Final/project/qcirc.png"
+    src_file = "/root/FinalProject/qcirc.png"
     # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
-    dst_file = "/home/darkhan/Final/project/static/qcirc.png"
+    dst_file = "/root/FinalProject/static/qcirc.png"
     if os.path.exists(dst_file):
         os.remove(dst_file)
     # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
-    shutil.move(src_file, "/home/darkhan/Final/project/static/")
+    shutil.move(src_file, "/root/FinalProject/static/")
     
     if os.path.exists(src_file):
         os.remove(src_file)
@@ -511,7 +511,7 @@ def find_adj_gates(request):
 def export_dump(request):
     global qc0
     qsave(qc0, 'save_temp')
-    file_path = os.path.join('/home/darkhan/Final/project/save_temp.qu')
+    file_path = os.path.join('/root/FinalProject/save_temp.qu')
     fsock = open(file_path, "rb")
     response = HttpResponse(fsock)
     response['Content-Disposition'] = 'attachment; filename=dump.txt'
@@ -526,7 +526,7 @@ def import_file(request):
     if request.method == "POST":
         saved_state = request.FILES['file']
 
-        dump_name = default_storage.save('/home/darkhan/Final/project/upload.qu', ContentFile(saved_state.read()))
+        dump_name = default_storage.save('/root/FinalProject/upload.qu', ContentFile(saved_state.read()))
  
 
         qc0 = qload('upload')
@@ -547,13 +547,13 @@ def import_file(request):
                 matrix.append(str(U0.data[i,j]))
 
         # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
-        src_file = "/home/darkhan/Final/project/qcirc.png"
+        src_file = "/root/FinalProject/qcirc.png"
         # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
-        dst_file = "/home/darkhan/Final/project/static/qcirc.png"
+        dst_file = "/root/FinalProject/static/qcirc.png"
         if os.path.exists(dst_file):
             os.remove(dst_file)
         # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
-        shutil.move(src_file, "/home/darkhan/Final/project/static/")
+        shutil.move(src_file, "/root/FinalProject/static/")
         
         if os.path.exists(src_file):
             os.remove(src_file)
