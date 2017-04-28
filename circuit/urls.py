@@ -16,4 +16,6 @@ urlpatterns = [
     url(r'^insert_swap/$', views.insert_swap, name='insert_swap'),
     url(r'^export_dump/$', views.export_dump, name='export_dump'),
     url(r'^import_file/$', views.import_file, name='import_file'),
+    url(r'^create_rule/$', views.create_rule, name='create_rule'),
+    url(r'^add_rule/$', views.add_rule, name='add_rule'),
 ]

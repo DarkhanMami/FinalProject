@@ -15,12 +15,13 @@
         </div>
     </div>
     <div class="row">
-      <div class="col-sm-4"><h4><strong>Gates</strong></h4></div>
-      <div class="col-sm-4"><h4><strong>SWAP Gates</strong></h4></div>
-      <div class="col-sm-4"><h4><strong>Rotations</strong></h4></div>
+      <div class="col-sm-3"><h4><strong>Gates</strong></h4></div>
+      <div class="col-sm-3"><h4><strong>SWAP Gates</strong></h4></div>
+      <div class="col-sm-3"><h4><strong>Rotations</strong></h4></div>
+      <div class="col-sm-3"><h4><strong>Transformation Rules</strong></h4></div>
     </div>
     <div class="row"> 
-      <div class="col-sm-4">
+      <div class="col-sm-3">
         <table class="table table-sm table-bordered table-condensed" style="font-size:12px">          
             <th class="col-xs-2">Name</th>
             <th class="col-xs-1">Target</th>
@@ -65,7 +66,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-3">
         <table class="table table-sm table-bordered table-condensed" style="font-size:12px">          
             <th class="col-xs-2">Type</th>
             <th class="col-xs-1">Target</th>
@@ -110,7 +111,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-3">
         <table class="table table-sm table-bordered table-condensed" style="font-size:12px">          
             <th class="col-xs-2">Type</th>
             <th class="col-xs-1">Target</th>
@@ -155,36 +156,49 @@
           </tbody>
         </table>
       </div>
+      <div class="col-sm-3">
+        <table id="rule_table" class="table table-sm table-bordered table-condensed" style="font-size:12px">          
+            <th class="col-xs-2">Name</th>
+            <th class="col-xs-2">Add rule</th>            
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
     </div>
     <div class="row">
-      <div class="col-sm-4">
+      <div class="col-sm-1">
+          <button class="btn btn-default" onclick="send()"> Add Gate </button>
+      </div>
+      <div class="col-sm-2">
         <div class="input-group">
           <span class="input-group-btn">
-            <button class="btn btn-default" onclick="send()"> Add Gate </button>
-            <button class="btn btn-default" type="button" disabled>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</button>
-            <button class="btn btn-default" onclick="insert_gate()" type="button">Insert the gate at</button>
+            <button class="btn btn-default" onclick="insert_gate()" type="button">Insert into</button>
           </span>
           <input type="text" class="form-control" placeholder="position..." id="gate_pos">
         </div>
       </div>
 
-      <div class="col-sm-4">
+      <div class="col-sm-1">
+          <button class="btn btn-default" onclick="new_swap()"> Add SWAP </button>
+      </div>
+      <div class="col-sm-2">
         <div class="input-group">
-          <span class="input-group-btn">
-            <button class="btn btn-default" onclick="new_swap()"> Add SWAP </button>
-            <button class="btn btn-default" type="button" disabled>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</button>
-            <button class="btn btn-default" onclick="insert_swap()" type="button">Insert the SWAP at</button>
+          <span class="input-group-btn">            
+            <button class="btn btn-default" onclick="insert_swap()" type="button">Insert into</button>
           </span>
           <input type="text" class="form-control" placeholder="position..." id="swap_pos">
         </div>
       </div>
 
-      <div class="col-sm-4">
+
+      <div class="col-sm-1">
+          <button class="btn btn-default" onclick="new_rotation()"> Add Rotation </button>
+      </div>
+      <div class="col-sm-2">
         <div class="input-group">
           <span class="input-group-btn">
-            <button class="btn btn-default" onclick="new_rotation()"> Add Rotation </button>
-            <button class="btn btn-default" type="button" disabled>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</button>
-            <button class="btn btn-default" onclick="insert_rotation()" type="button">Insert the rotation at</button>
+            <button class="btn btn-default" onclick="insert_rotation()" type="button">Insert into</button>
           </span>
           <input type="text" class="form-control" placeholder="position..." id="rot_pos">
         </div>
@@ -198,6 +212,22 @@
             <span class="input-group-btn">
               <button class="btn btn-default" type="button" onclick="remove_gate()">Remove gate by index</button>
               <button class="btn btn-default" type="button" onclick="find_adj_gates()">Find adjacent gates</button>
+            </span>
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-1">
+            <input type="text" class="form-control" placeholder="From" id="rule_from">
+        </div>
+        <div class="col-lg-1">
+            <input type="text" class="form-control" placeholder="To" id="rule_to">
+        </div>
+        <div class="col-lg-2">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Name" id="rule_name">            
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" onclick="create_rule()">Create new Rule</button>
             </span>
           </div>
         </div>
@@ -224,7 +254,7 @@
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "/new_circuit/",
+              "url": "http://localhost:8000/new_circuit/",
               "method": "POST",
               "processData": false,
               "contentType": false,
@@ -267,7 +297,7 @@
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "/remove_gate/",
+              "url": "http://localhost:8000/remove_gate/",
               "method": "POST",
               "processData": false,
               "contentType": false,
@@ -348,7 +378,7 @@
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "/calculate/",
+              "url": "http://localhost:8000/calculate/",
               "method": "POST",
               "processData": false,
               "contentType": false,
@@ -422,7 +452,7 @@
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "/insert_gate/",
+              "url": "http://localhost:8000/insert_gate/",
               "method": "POST",
               "processData": false,
               "contentType": false,
@@ -493,7 +523,7 @@
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "/new_rotation/",
+              "url": "http://localhost:8000/new_rotation/",
               "method": "POST",
               "processData": false,
               "contentType": false,
@@ -563,7 +593,7 @@
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "/insert_rotation/",
+              "url": "http://localhost:8000/insert_rotation/",
               "method": "POST",
               "processData": false,
               "contentType": false,
@@ -634,7 +664,7 @@
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "/new_swap/",
+              "url": "http://localhost:8000/new_swap/",
               "method": "POST",
               "processData": false,
               "contentType": false,
@@ -705,7 +735,7 @@
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "/insert_swap/",
+              "url": "http://localhost:8000/insert_swap/",
               "method": "POST",
               "processData": false,
               "contentType": false,
@@ -767,7 +797,7 @@
             var settings = {
               "async": true,
               "crossDomain": true,
-              "url": "/find_adj_gates/",
+              "url": "http://localhost:8000/find_adj_gates/",
               "method": "POST",
               "processData": false,
               "contentType": false,
@@ -889,6 +919,117 @@
               $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
             });
         }
+
+
+        function create_rule() {
+          var form = new FormData();
+          form.append("name", $("#rule_name").val())
+          form.append("from", $("#rule_from").val())
+          form.append("to", $("#rule_to").val())
+
+            var settings = {
+              "async": true,
+              "crossDomain": true,
+              "url": "http://localhost:8000/create_rule/",
+              "method": "POST",
+              "processData": false,
+              "contentType": false,
+              "mimeType": "multipart/form-data",
+              "data": form
+            };
+
+            $.ajax(settings).done(function (response) {
+
+              var table = document.getElementById('rule_table');
+
+
+              var row = table.insertRow(table.rows.length);
+
+              var cell1 = row.insertCell(0);
+              cell1.innerHTML = '<input style="font-size:11px" class="form-control input-sm" type="text" name="r_types" value="' + $("#rule_name").val() + '" disabled>';
+
+              var cell2=row.insertCell(1);
+              cell2.innerHTML = '<button style="font-size:11px" class="form-control input-sm btn btn-default" onclick="add_rule(\'' + $("#rule_name").val() + '\')">Add rule</button>';
+
+              $("#rule_name").val('');
+              $("#rule_from").val('');
+              $("#rule_to").val('');
+            });           
+
+        }
+
+        function add_rule(name) {
+          var form = new FormData();
+          form.append("name", name)
+
+            var settings = {
+              "async": true,
+              "crossDomain": true,
+              "url": "http://localhost:8000/add_rule/",
+              "method": "POST",
+              "processData": false,
+              "contentType": false,
+              "mimeType": "multipart/form-data",
+              "data": form
+            };
+
+            $.ajax(settings).done(function (response) {
+              var myMap = JSON.parse(response);
+              var myList = myMap['matrix'];
+              var rowHtml = '';
+
+              if (myList.length < 2) {
+                var n = 0;
+                if ($("#qubits").val() == 1){
+                  n = 2;
+                } else {
+                  n = Math.pow(2, $("#qubits").val())
+                }
+                var i = 0;
+
+                for (row = 0; row < n; row++) {
+                  rowHtml+='<tr>';
+                  for (col = 0; col < n; col++) {
+                    rowHtml+='<td>'+"0"+'</td>';
+                    i++;
+                  }
+                  rowHtml+='</tr>';
+                }
+              } else {
+                var n = 0;
+                if ($("#qubits").val() == 1){
+                  n = 2;
+                } else {
+                  n = Math.pow(2, $("#qubits").val())
+                }
+                var i = 0;
+
+                for (row = 0; row < n; row++) {
+                  rowHtml+='<tr>';
+                  for (col = 0; col < n; col++) {
+                    var str = '';
+                    var str_int;
+                    if (myList[i].includes('+0j')) {
+                      str = myList[i].replace('+0j', '').replace('(', '').replace(')','');
+
+                      str_int = parseFloat(str).toFixed(2);
+                    } else {
+                      str_int = myList[i];
+                    }
+                    rowHtml+='<td>'+str_int+'</td>';
+                    i++;
+                  }
+                  rowHtml+='</tr>';
+                }
+              }
+
+              $("#result").html(rowHtml);
+              $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
+            });           
+
+        }
+
+
 
     </script>
 {% endblock %}
