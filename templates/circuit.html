@@ -4,23 +4,29 @@
     <div class="row">
         <div class="col-lg-6">
           <div class="input-group">
-            <input type="text" class="form-control" placeholder="Number of qubits" id="qubits">
+            <input type="text" data-step="1" data-intro="Assign the qubit number to create new Quantum Circuit" class="form-control" placeholder="Number of qubits" id="qubits">
             <span class="input-group-btn">
-                <button class="btn btn-default" type="button" onclick="new_circuit()">New Gate</button>
-                <button class="btn btn-default"><a href="/export_dump/">Export dump</a></button>
-                <button class="btn btn-default" type="button" onclick="import_file()">Import dump</button>                
+                <button data-step="2" data-intro="Click the button to create a circuit with assigned qubit number" class="btn btn-default" type="button" onclick="new_circuit()">New Circuit</button>                
+                <button data-step="12" data-intro="You can save your work and download the dump" class="btn btn-default"><a href="/export_dump/">Export dump</a></button>
+                <button data-step="13" data-intro="To continue your work again upload your saved file here" class="btn btn-default" type="button" onclick="import_file()">Import dump</button>  
             </span>
             <input type="file" class="form-control" id="file" placeholder="file">
+
           </div>
         </div>
+        <div class="col-lg-5">
+        </div>
+        <div class="col-lg-1">
+            <a data-step="16" data-intro="To start Tutorial again click this button. Start working on NOVA" class="btn btn-large btn-success" href="javascript:void(0);" onclick="javascript:introJs().start();">Tutorial</a>
+        </div>     
     </div>
     <div class="row">
       <div class="col-sm-3"><h4><strong>Gates</strong></h4></div>
       <div class="col-sm-3"><h4><strong>SWAP Gates</strong></h4></div>
       <div class="col-sm-3"><h4><strong>Rotations</strong></h4></div>
-      <div class="col-sm-3"><h4><strong>Transformation Rules</strong></h4></div>
+      <div class="col-sm-3" data-step="11" data-intro="Created Transformation rules are stored here"><h4><strong>Transformation Rules</strong></h4></div>
     </div>
-    <div class="row"> 
+    <div class="row" data-step="3" data-intro="You can select any quantum gate or rotation for adding to the quantum circuit"> 
       <div class="col-sm-3">
         <table class="table table-sm table-bordered table-condensed" style="font-size:12px">          
             <th class="col-xs-2">Name</th>
@@ -28,7 +34,7 @@
             <th class="col-xs-1">Control</th>
           </thead>
           <tbody>
-            <tr>
+            <tr data-step="4" data-intro="Assign the target qubit">
               <td><input style="font-size:10px" class="form-control input-sm" type="text" name="g_types" value="HADAMARD" disabled></td>
               <td><input style="font-size:10px" class="form-control input-sm" type="text" name="g_targets"></td>
               <td><input style="font-size:10px" class="form-control input-sm" type="text" name="g_controls" disabled></td>
@@ -38,7 +44,7 @@
               <td><input style="font-size:10px" class="form-control input-sm" type="text" name="g_targets">
               <td><input style="font-size:10px" class="form-control input-sm" type="text" name="g_controls" disabled></td>
             </tr>
-            <tr>
+            <tr data-step="5" data-intro="Or target and control qubits">
               <td><input style="font-size:10px" class="form-control input-sm" type="text" name="g_types" value="CNOT" disabled></td>
               <td><input style="font-size:10px" class="form-control input-sm" type="text" name="g_targets">
               <td><input style="font-size:10px" class="form-control input-sm" type="text" name="g_controls"></td>
@@ -118,7 +124,7 @@
             <th class="col-xs-1">angle (pi/)</th>
           </thead>
           <tbody>
-            <tr>
+            <tr data-step="6" data-intro="Or phase of rotation for selected gate">
               <td><input style="font-size:11px" class="form-control input-sm" type="text" name="r_types" value="RX" disabled></td>
               <td><input style="font-size:11px" class="form-control input-sm" type="text" name="r_targets"></td>
               <td><input style="font-size:11px" class="form-control input-sm" type="text" name="r_angle"></td>
@@ -166,7 +172,7 @@
         </table>
       </div>
     </div>
-    <div class="row">
+    <div class="row" data-step="7" data-intro="Then click the proper button for adding selected quantum gate or rotation to the quantum circuit or to insert it to a particular place on the circuit">
       <div class="col-sm-1">
           <button class="btn btn-default" onclick="send()"> Add Gate </button>
       </div>
@@ -210,13 +216,13 @@
           <div class="input-group">
             <input type="text" class="form-control" placeholder="Index" id="gate_ind">
             <span class="input-group-btn">
-              <button class="btn btn-default" type="button" onclick="remove_gate()">Remove gate by index</button>
-              <button class="btn btn-default" type="button" onclick="find_adj_gates()">Find adjacent gates</button>
+              <button data-step="8" data-intro="You can delete any gate on the circuit by assigning its index" class="btn btn-default" type="button" onclick="remove_gate()">Remove gate by index</button>
+              <button data-step="9" data-intro="If you want to make complex quantum gate simpler, just find its adjacent gates" class="btn btn-default" type="button" onclick="find_adj_gates()">Find adjacent gates</button>
             </span>
           </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row" data-step="10" data-intro="This function is for creating Transformation rule from gates on the quantum circuit. Just select the range for gates and assign the name to the new rule">
         <div class="col-lg-1">
             <input type="text" class="form-control" placeholder="From" id="rule_from">
         </div>
@@ -233,11 +239,11 @@
         </div>
     </div>
     <br>
-    <div class="row">
-        <img id="image"></img>        
+    <div class="row" data-step="14" data-intro="The image of your created Quantum Circuit will be here">
+        <img id="image" ></img>        
     </div>
     <br>
-    <div class="row">
+    <div class="row" data-step="15" data-intro="The matrix of your created Quantum Circuit will be here">
         <div class="col">
             <table class="table table-striped table-bordered table-condensed" id="result" style="font-size:9px; margin-left: 20px;"></table>
         </div>        
@@ -248,6 +254,8 @@
 {% block script %}
 
     <script>
+        var user = "";
+
         function new_circuit() {
           var form = new FormData();
           form.append("N", $("#qubits").val())
@@ -264,7 +272,8 @@
             };
 
             $.ajax(settings).done(function (response) {
-              // $("#result").html(response);
+              var myMap = JSON.parse(response);
+              user = myMap['user'];
 
               var rowHtml = '';
               var n = 0;
@@ -286,7 +295,7 @@
               
 
               $("#result").html(rowHtml);
-              $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
+              $("#image").attr("src", "/static/user/" + user + "/qcirc.png?v=" + new Date().getTime());
             });
 
         }
@@ -358,7 +367,7 @@
 
               $("#result").html(rowHtml);
 
-              $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
+              $("#image").attr("src", "/static/user/" + user + "/qcirc.png?v=" + new Date().getTime());
               $("#gate_ind").val('');
             });           
 
@@ -425,7 +434,7 @@
 
 
 
-              $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
+              $("#image").attr("src", "/static/user/" + user + "/qcirc.png?v=" + new Date().getTime());
               $('input[name=g_targets]').each(function(i, v) {
                   v.value = '';
               });
@@ -497,7 +506,7 @@
 
               $("#result").html(rowHtml);
 
-              $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
+              $("#image").attr("src", "/static/user/" + user + "/qcirc.png?v=" + new Date().getTime());
               $('input[name=g_targets]').each(function(i, v) {
                   v.value = '';
               });
@@ -567,7 +576,7 @@
               
 
               $("#result").html(rowHtml);
-              $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
+              $("#image").attr("src", "/static/user/" + user + "/qcirc.png?v=" + new Date().getTime());
               $('input[name=r_targets]').each(function(i, v) {
                   v.value = '';
               });
@@ -637,7 +646,7 @@
               
 
               $("#result").html(rowHtml);
-              $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
+              $("#image").attr("src", "/static/user/" + user + "/qcirc.png?v=" + new Date().getTime());
               $('input[name=r_targets]').each(function(i, v) {
                   v.value = '';
               });
@@ -708,7 +717,7 @@
               
 
               $("#result").html(rowHtml);
-              $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
+              $("#image").attr("src", "/static/user/" + user + "/qcirc.png?v=" + new Date().getTime());
               $('input[name=s_targets]').each(function(i, v) {
                   v.value = '';
               });
@@ -779,7 +788,7 @@
               
 
               $("#result").html(rowHtml);
-              $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
+              $("#image").attr("src", "/static/user/" + user + "/qcirc.png?v=" + new Date().getTime());
               $('input[name=s_targets]').each(function(i, v) {
                   v.value = '';
               });
@@ -841,7 +850,7 @@
               
 
               $("#result").html(rowHtml);
-              $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());             
+              $("#image").attr("src", "/static/user/" + user + "/qcirc.png?v=" + new Date().getTime());             
 
             });
         }
@@ -917,7 +926,7 @@
               }
 
               $("#result").html(rowHtml);
-              $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
+              $("#image").attr("src", "/static/user/" + user + "/qcirc.png?v=" + new Date().getTime());
             });
         }
 
@@ -1025,7 +1034,7 @@
               }
 
               $("#result").html(rowHtml);
-              $("#image").attr("src", "/static/qcirc.png?v=" + new Date().getTime());
+              $("#image").attr("src", "/static/user/" + user + "/qcirc.png?v=" + new Date().getTime());
             });           
 
         }

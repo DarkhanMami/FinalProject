@@ -12,71 +12,74 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 
 import json
-
 import matplotlib.pyplot as plt
 import numpy as np
 from IPython.display import Image
 from numpy import pi
 from qutip import *
+import random, string
 
-N = 2
-qc0 = QubitCircuit(N)
+
+def randomword(length):
+   return ''.join(random.choice(string.lowercase) for i in range(length))
+
 
 rules = dict()
+circuits = dict()
+Ns = dict()
+base_dir = '/home/darkhan/Final/project'
 
-qc0.png
-# src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
-src_file = "/root/FinalProject/qcirc.png"
-# dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
-dst_file = "/root/FinalProject/static/qcirc.png"
-if os.path.exists(dst_file):
-    os.remove(dst_file)
-# shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
-if os.path.exists(src_file):
-    shutil.move(src_file, "/root/FinalProject/static/")
-
-if os.path.exists(src_file):
-    os.remove(src_file)
 
 
 
 @csrf_exempt
 def new_circuit(request):
     qubits = request.POST.get('N')
-    global qc0
-    global N
+    global Ns    
+    global circuits
+
+    user = request.COOKIES['users']
     N = int(qubits)
     qc0 = QubitCircuit(N)
+    circuits[user] = qc0
+    Ns[user] = N
+
+
     if N != 1:
-        qc0.png
+        circuits[user].png
     matrix = []
     # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
-    src_file = "/root/FinalProject/qcirc.png"
+    src_file = base_dir + "/qcirc.png"
     # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
-    dst_file = "/root/FinalProject/static/qcirc.png"
+    dst_file = base_dir + "/static/user/" + user + "/qcirc.png"
     if os.path.exists(dst_file):
         os.remove(dst_file)
     # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
     if os.path.exists(src_file):
-        shutil.move(src_file, "/root/FinalProject/static/")
+        shutil.move(src_file, base_dir + "/static/user/" + user + "/")
 
     if os.path.exists(src_file):
         os.remove(src_file)
 
     return JsonResponse({
-        "matrix": matrix
+        "matrix": matrix,
+        "user": user
     })
 
 @csrf_exempt
 def remove_gate(request):
     ind = request.POST.get('ind')
-    global qc0
-    global N
-    temp = int(ind)
-    qc0.remove_gate(temp)
-    qc0.png
+    global circuits
+    global Ns
+    user = request.COOKIES['users']
+    user = request.COOKIES['users']
+    N = Ns[user]
 
-    U_list0 = qc0.propagators()
+    temp = int(ind)
+    circuits[user].remove_gate(temp)
+    circuits[user].png
+
+    U_list0 = circuits[user].propagators()
     U0 = gate_sequence_product(U_list0)
     matrix = []
 
@@ -89,13 +92,13 @@ def remove_gate(request):
         print 'empty circuit'
 
     # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
-    src_file = "/root/FinalProject/qcirc.png"
+    src_file = base_dir + "/qcirc.png"
     # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
-    dst_file = "/root/FinalProject/static/qcirc.png"
+    dst_file = base_dir + "/static/user/" + user + "/qcirc.png"
     if os.path.exists(dst_file):
         os.remove(dst_file)
     # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
-    shutil.move(src_file, "/root/FinalProject/static/")
+    shutil.move(src_file, base_dir + "/static/user/" + user + "/")
     
     if os.path.exists(src_file):
         os.remove(src_file)
@@ -112,8 +115,10 @@ def insert_gate(request):
     targets = request.POST.getlist('targets[]')
     controls = request.POST.getlist('controls[]')
     total = len(types)
-    global qc0
-    global N
+    global circuits
+    global Ns
+    user = request.COOKIES['users']
+    N = Ns[user]
 
     for i in range(total):
         name = types[i]
@@ -137,12 +142,12 @@ def insert_gate(request):
                         ctrols[i] = int(ctrols[i])
                 else:
                     ctrols.append(int(control))
-                qc0.gates.insert(int(pos), Gate(name, targets=tgets, controls=ctrols))
+                circuits[user].gates.insert(int(pos), Gate(name, targets=tgets, controls=ctrols))
             else:
-                qc0.gates.insert(int(pos), Gate(name, targets=tgets))
+                circuits[user].gates.insert(int(pos), Gate(name, targets=tgets))
 
-    qc0.png
-    U_list0 = qc0.propagators()
+    circuits[user].png
+    U_list0 = circuits[user].propagators()
     U0 = gate_sequence_product(U_list0)
     matrix = []
 
@@ -155,13 +160,13 @@ def insert_gate(request):
             matrix.append(str(U0.data[i,j]))
 
     # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
-    src_file = "/root/FinalProject/qcirc.png"
+    src_file = base_dir + "/qcirc.png"
     # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
-    dst_file = "/root/FinalProject/static/qcirc.png"
+    dst_file = base_dir + "/static/user/" + user + "/qcirc.png"
     if os.path.exists(dst_file):
         os.remove(dst_file)
     # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
-    shutil.move(src_file, "/root/FinalProject/static/")
+    shutil.move(src_file, base_dir + "/static/user/" + user + "/")
     
     if os.path.exists(src_file):
         os.remove(src_file)
@@ -177,9 +182,11 @@ def calculate(request):
     targets = request.POST.getlist('targets[]')
     controls = request.POST.getlist('controls[]')
     total = len(types)
-    global qc0
-    global N
-    global all_gates
+    global circuits
+    global Ns
+    user = request.COOKIES['users']
+
+    N = Ns[user]
 
     for i in range(total):
         name = types[i]
@@ -203,12 +210,12 @@ def calculate(request):
                         ctrols[i] = int(ctrols[i])
                 else:
                     ctrols.append(int(control))
-                qc0.add_gate(name, targets=tgets, controls=ctrols)
+                circuits[user].add_gate(name, targets=tgets, controls=ctrols)
             else:
-                qc0.add_gate(name, targets=tgets)
+                circuits[user].add_gate(name, targets=tgets)
 
-    qc0.png
-    U_list0 = qc0.propagators()
+    circuits[user].png
+    U_list0 = circuits[user].propagators()
     U0 = gate_sequence_product(U_list0)
     matrix = []
 
@@ -221,13 +228,13 @@ def calculate(request):
             matrix.append(str(U0.data[i,j]))
 
     # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
-    src_file = "/root/FinalProject/qcirc.png"
+    src_file = base_dir + "/qcirc.png"
     # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
-    dst_file = "/root/FinalProject/static/qcirc.png"
+    dst_file = base_dir + "/static/user/" + user + "/qcirc.png"
     if os.path.exists(dst_file):
         os.remove(dst_file)
     # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
-    shutil.move(src_file, "/root/FinalProject/static/")
+    shutil.move(src_file, base_dir + "/static/user/" + user + "/")
     
     if os.path.exists(src_file):
         os.remove(src_file)
@@ -244,8 +251,10 @@ def insert_rotation(request):
     targets = request.POST.getlist('targets[]')
     angles = request.POST.getlist('angles[]')
     total = len(types)
-    global qc0
-    global N
+    global circuits
+    global Ns
+    user = request.COOKIES['users']
+    N = Ns[user]
 
     for i in range(total):
         name = types[i]
@@ -259,11 +268,11 @@ def insert_rotation(request):
                     tgets[i] = int(tgets[i])
             else:
                 tgets.append(int(target))
-            qc0.gates.insert(int(pos), Gate(name, tgets, None, pi/int(angle), r"\pi/"+str(angle)))
+            circuits[user].gates.insert(int(pos), Gate(name, tgets, None, pi/int(angle), r"\pi/"+str(angle)))
 
 
-    qc0.png
-    U_list0 = qc0.propagators()
+    circuits[user].png
+    U_list0 = circuits[user].propagators()
     U0 = gate_sequence_product(U_list0)
     matrix = []
 
@@ -276,13 +285,13 @@ def insert_rotation(request):
             matrix.append(str(U0.data[i,j]))
 
     # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
-    src_file = "/root/FinalProject/qcirc.png"
+    src_file = base_dir + "/qcirc.png"
     # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
-    dst_file = "/root/FinalProject/static/qcirc.png"
+    dst_file = base_dir + "/static/user/" + user + "/qcirc.png"
     if os.path.exists(dst_file):
         os.remove(dst_file)
     # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
-    shutil.move(src_file, "/root/FinalProject/static/")
+    shutil.move(src_file, base_dir + "/static/user/" + user + "/")
     
     if os.path.exists(src_file):
         os.remove(src_file)
@@ -298,8 +307,10 @@ def new_rotation(request):
     targets = request.POST.getlist('targets[]')
     angles = request.POST.getlist('angles[]')
     total = len(types)
-    global qc0
-    global N
+    global circuits
+    global Ns
+    user = request.COOKIES['users']
+    N = Ns[user]
 
     for i in range(total):
         name = types[i]
@@ -313,11 +324,11 @@ def new_rotation(request):
                     tgets[i] = int(tgets[i])
             else:
                 tgets.append(int(target))
-            qc0.add_gate(name, tgets, None, pi/int(angle), r"\pi/"+str(angle))
+            circuits[user].add_gate(name, tgets, None, pi/int(angle), r"\pi/"+str(angle))
 
 
-    qc0.png
-    U_list0 = qc0.propagators()
+    circuits[user].png
+    U_list0 = circuits[user].propagators()
     U0 = gate_sequence_product(U_list0)
     matrix = []
 
@@ -330,13 +341,13 @@ def new_rotation(request):
             matrix.append(str(U0.data[i,j]))
 
     # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
-    src_file = "/root/FinalProject/qcirc.png"
+    src_file = base_dir + "/qcirc.png"
     # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
-    dst_file = "/root/FinalProject/static/qcirc.png"
+    dst_file = base_dir + "/static/user/" + user + "/qcirc.png"
     if os.path.exists(dst_file):
         os.remove(dst_file)
     # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
-    shutil.move(src_file, "/root/FinalProject/static/")
+    shutil.move(src_file, base_dir + "/static/user/" + user + "/")
     
     if os.path.exists(src_file):
         os.remove(src_file)
@@ -352,8 +363,10 @@ def insert_swap(request):
     targets = request.POST.getlist('targets[]')
     angles = request.POST.getlist('angles[]')
     total = len(types)
-    global qc0
-    global N
+    global circuits
+    global Ns
+    user = request.COOKIES['users']
+    N = Ns[user]
 
     for i in range(total):
         name = types[i]
@@ -367,7 +380,7 @@ def insert_swap(request):
                     tgets[i] = int(tgets[i])
             else:
                 tgets.append(int(target))
-            qc0.gates.insert(int(pos), Gate(name, tgets, None, pi/int(angle), r"\pi/"+str(angle)))
+            circuits[user].gates.insert(int(pos), Gate(name, tgets, None, pi/int(angle), r"\pi/"+str(angle)))
         elif target != '' and angle == '':
             tgets = []
             if ',' in str(target):
@@ -376,11 +389,11 @@ def insert_swap(request):
                     tgets[i] = int(tgets[i])
             else:
                 tgets.append(int(target))
-            qc0.gates.insert(int(pos), Gate(name, tgets, None))
+            circuits[user].gates.insert(int(pos), Gate(name, tgets, None))
 
 
-    qc0.png
-    U_list0 = qc0.propagators()
+    circuits[user].png
+    U_list0 = circuits[user].propagators()
     U0 = gate_sequence_product(U_list0)
     matrix = []
 
@@ -393,13 +406,13 @@ def insert_swap(request):
             matrix.append(str(U0.data[i,j]))
 
     # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
-    src_file = "/root/FinalProject/qcirc.png"
+    src_file = base_dir + "/qcirc.png"
     # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
-    dst_file = "/root/FinalProject/static/qcirc.png"
+    dst_file = base_dir + "/static/user/" + user + "/qcirc.png"
     if os.path.exists(dst_file):
         os.remove(dst_file)
     # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
-    shutil.move(src_file, "/root/FinalProject/static/")
+    shutil.move(src_file, base_dir + "/static/user/" + user + "/")
     
     if os.path.exists(src_file):
         os.remove(src_file)
@@ -415,8 +428,10 @@ def new_swap(request):
     targets = request.POST.getlist('targets[]')
     angles = request.POST.getlist('angles[]')
     total = len(types)
-    global qc0
-    global N
+    global circuits
+    global Ns
+    user = request.COOKIES['users']
+    N = Ns[user]
 
     for i in range(total):
         name = types[i]
@@ -430,7 +445,7 @@ def new_swap(request):
                     tgets[i] = int(tgets[i])
             else:
                 tgets.append(int(target))   
-            qc0.add_gate(name, tgets, None, pi/int(angle), r"\pi/"+str(angle))
+            circuits[user].add_gate(name, tgets, None, pi/int(angle), r"\pi/"+str(angle))
         elif target != '' and angle == '':
             tgets = []
             if ',' in str(target):
@@ -439,11 +454,11 @@ def new_swap(request):
                     tgets[i] = int(tgets[i])
             else:
                 tgets.append(int(target))        
-            qc0.add_gate(name, tgets, None)
+            circuits[user].add_gate(name, tgets, None)
 
 
-    qc0.png
-    U_list0 = qc0.propagators()
+    circuits[user].png
+    U_list0 = circuits[user].propagators()
     U0 = gate_sequence_product(U_list0)
     matrix = []
 
@@ -456,13 +471,13 @@ def new_swap(request):
             matrix.append(str(U0.data[i,j]))
 
     # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
-    src_file = "/root/FinalProject/qcirc.png"
+    src_file = base_dir + "/qcirc.png"
     # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
-    dst_file = "/root/FinalProject/static/qcirc.png"
+    dst_file = base_dir + "/static/user/" + user + "/qcirc.png"
     if os.path.exists(dst_file):
         os.remove(dst_file)
     # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
-    shutil.move(src_file, "/root/FinalProject/static/")
+    shutil.move(src_file, base_dir + "/static/user/" + user + "/")
     
     if os.path.exists(src_file):
         os.remove(src_file)
@@ -473,13 +488,15 @@ def new_swap(request):
 
 @csrf_exempt
 def find_adj_gates(request):
-    global qc0
-    global N
+    global circuits
+    global Ns
+    user = request.COOKIES['users']
+    N = Ns[user]
 
-    qc0 = qc0.adjacent_gates()
+    circuits[user] = circuits[user].adjacent_gates()
 
-    qc0.png
-    U_list0 = qc0.propagators()
+    circuits[user].png
+    U_list0 = circuits[user].propagators()
     U0 = gate_sequence_product(U_list0)
     matrix = []
 
@@ -492,13 +509,13 @@ def find_adj_gates(request):
             matrix.append(str(U0.data[i,j]))
 
     # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
-    src_file = "/root/FinalProject/qcirc.png"
+    src_file = base_dir + "/qcirc.png"
     # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
-    dst_file = "/root/FinalProject/static/qcirc.png"
+    dst_file = base_dir + "/static/user/" + user + "/qcirc.png"
     if os.path.exists(dst_file):
         os.remove(dst_file)
     # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
-    shutil.move(src_file, "/root/FinalProject/static/")
+    shutil.move(src_file, base_dir + "/static/user/" + user + "/")
     
     if os.path.exists(src_file):
         os.remove(src_file)
@@ -510,32 +527,38 @@ def find_adj_gates(request):
 
 @csrf_exempt
 def export_dump(request):
-    global qc0
-    qsave(qc0, 'save_temp')
-    file_path = os.path.join('/root/FinalProject/save_temp.qu')
+    global circuits
+    qsave(circuits[user], 'save_temp')
+    file_path = os.path.join(base_dir + '/save_temp.qu')
     fsock = open(file_path, "rb")
     response = HttpResponse(fsock)
     response['Content-Disposition'] = 'attachment; filename=dump.txt'
+    if os.path.exists(base_dir + '/save_temp.qu'):
+        os.remove(base_dir + '/save_temp.qu')
     return response
 
 
 @csrf_exempt
 def import_file(request):
-    global qc0
-    global N
+    global circuits
+    global Ns
+    user = request.COOKIES['users']    
 
     if request.method == "POST":
         saved_state = request.FILES['file']
 
-        dump_name = default_storage.save('/root/FinalProject/upload.qu', ContentFile(saved_state.read()))
+        if os.path.exists(base_dir + '/upload.qu'):
+            os.remove(base_dir + '/upload.qu')
+
+        dump_name = default_storage.save(base_dir + '/upload.qu', ContentFile(saved_state.read()))
  
 
-        qc0 = qload('upload')
+        circuits[user] = qload('upload')
 
-        N = qc0.N
+        N = circuits[user].N
 
-        qc0.png
-        U_list0 = qc0.propagators()
+        circuits[user].png
+        U_list0 = circuits[user].propagators()
         U0 = gate_sequence_product(U_list0)
         matrix = []
 
@@ -548,13 +571,13 @@ def import_file(request):
                 matrix.append(str(U0.data[i,j]))
 
         # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
-        src_file = "/root/FinalProject/qcirc.png"
+        src_file = base_dir + "/qcirc.png"
         # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
-        dst_file = "/root/FinalProject/static/qcirc.png"
+        dst_file = base_dir + "/static/user/" + user + "/qcirc.png"
         if os.path.exists(dst_file):
             os.remove(dst_file)
         # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
-        shutil.move(src_file, "/root/FinalProject/static/")
+        shutil.move(src_file, base_dir + "/static/user/" + user + "/")
         
         if os.path.exists(src_file):
             os.remove(src_file)
@@ -571,7 +594,7 @@ def import_file(request):
 
 @csrf_exempt
 def create_rule(request):
-    global qc0
+    global circuits
     global rules
     name = request.POST.get('name')
     rule_from = request.POST.get('from')
@@ -580,7 +603,7 @@ def create_rule(request):
     temp_rule = []
 
     for i in range(int(rule_from)-1, int(rule_to)):
-        temp_rule.append(qc0.gates[i])
+        temp_rule.append(circuits[user].gates[i])
 
     rules[name] = temp_rule
 
@@ -591,9 +614,11 @@ def create_rule(request):
 
 @csrf_exempt
 def add_rule(request):
-    global qc0
+    global circuits
     global rules
-    global N
+    global Ns
+    user = request.COOKIES['users']
+    N = Ns[user]
 
 
     name = request.POST.get('name')
@@ -601,11 +626,11 @@ def add_rule(request):
     temp_rule = rules[name]
 
     for rule in temp_rule:
-        qc0.gates.insert(len(qc0.gates), rule)
+        circuits[user].gates.insert(len(circuits[user].gates), rule)
 
 
-    qc0.png
-    U_list0 = qc0.propagators()
+    circuits[user].png
+    U_list0 = circuits[user].propagators()
     U0 = gate_sequence_product(U_list0)
     matrix = []
 
@@ -618,13 +643,13 @@ def add_rule(request):
             matrix.append(str(U0.data[i,j]))
 
     # src_file = os.path.join("settings.BASE_DIR", "qcirc.png")
-    src_file = "/root/FinalProject/qcirc.png"
+    src_file = base_dir + "/qcirc.png"
     # dst_file = os.path.join(settings.BASE_DIR, "static", "qcirc.png")
-    dst_file = "/root/FinalProject/static/qcirc.png"
+    dst_file = base_dir + "/static/user/" + user + "/qcirc.png"
     if os.path.exists(dst_file):
         os.remove(dst_file)
     # shutil.move(src_file, os.path.join(settings.BASE_DIR, "static"))
-    shutil.move(src_file, "/root/FinalProject/static/")
+    shutil.move(src_file, base_dir + "/static/user/" + user + "/")
     
     if os.path.exists(src_file):
         os.remove(src_file)
@@ -635,4 +660,16 @@ def add_rule(request):
 
 
 def index(request):
-    return render(request, 'circuit.html')
+    global user
+    user = randomword(6)
+    response = render(request, 'circuit.html')
+
+
+    if not request.COOKIES.has_key(user):
+        os.mkdir(os.path.join(base_dir + "/static/user", user))
+        response.set_cookie('users', user)
+    else:
+        print 'has_cookie!!!!!!'
+    
+
+    return response
