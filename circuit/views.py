@@ -27,7 +27,9 @@ def randomword(length):
 rules = dict()
 circuits = dict()
 Ns = dict()
-base_dir = '/home/darkhan/Final/project'
+base_dir = '/root/FinalProject'
+user = ''
+exp_imp = dict()
 
 
 
@@ -37,6 +39,7 @@ def new_circuit(request):
     qubits = request.POST.get('N')
     global Ns    
     global circuits
+    global user
 
     user = request.COOKIES['users']
     N = int(qubits)
@@ -527,12 +530,21 @@ def find_adj_gates(request):
 
 @csrf_exempt
 def export_dump(request):
+    global user
     global circuits
+    global rules
+    global exp_imp
+
+
+    if user in rules:
+        exp_imp[user] = dict()
+        exp_imp[user] = rules[user]
+
     qsave(circuits[user], 'save_temp')
     file_path = os.path.join(base_dir + '/save_temp.qu')
     fsock = open(file_path, "rb")
     response = HttpResponse(fsock)
-    response['Content-Disposition'] = 'attachment; filename=dump.txt'
+    response['Content-Disposition'] = 'attachment; filename=' + user
     if os.path.exists(base_dir + '/save_temp.qu'):
         os.remove(base_dir + '/save_temp.qu')
     return response
@@ -542,20 +554,32 @@ def export_dump(request):
 def import_file(request):
     global circuits
     global Ns
-    user = request.COOKIES['users']    
+    global user
+
+    user = request.COOKIES['users']
 
     if request.method == "POST":
         saved_state = request.FILES['file']
+
+        rule_names = []
+
+        if str(saved_state) in exp_imp:
+            rules[user] = dict()
+            rules[user] = exp_imp[str(saved_state)]
+            for rule in rules[user]:
+                rule_names.append(rule)            
+
 
         if os.path.exists(base_dir + '/upload.qu'):
             os.remove(base_dir + '/upload.qu')
 
         dump_name = default_storage.save(base_dir + '/upload.qu', ContentFile(saved_state.read()))
- 
+        
 
         circuits[user] = qload('upload')
 
         N = circuits[user].N
+        Ns[user] = N
 
         circuits[user].png
         U_list0 = circuits[user].propagators()
@@ -584,7 +608,9 @@ def import_file(request):
 
         return JsonResponse({
             "matrix": matrix,
-            "N"     : N
+            "N"     : N,
+            "user": user,
+            "rule_names": rule_names
         })
 
 
@@ -596,16 +622,21 @@ def import_file(request):
 def create_rule(request):
     global circuits
     global rules
+    global user
+
     name = request.POST.get('name')
     rule_from = request.POST.get('from')
     rule_to = request.POST.get('to')
 
     temp_rule = []
 
-    for i in range(int(rule_from)-1, int(rule_to)):
+    for i in range(int(rule_from), int(rule_to) + 1):
         temp_rule.append(circuits[user].gates[i])
 
-    rules[name] = temp_rule
+    if (user not in rules):
+        rules[user] = dict()
+
+    rules[user][name] = temp_rule
 
     return JsonResponse({
             "name": name
@@ -617,15 +648,17 @@ def add_rule(request):
     global circuits
     global rules
     global Ns
-    user = request.COOKIES['users']
+    global user
+
     N = Ns[user]
 
 
     name = request.POST.get('name')
 
-    temp_rule = rules[name]
+    temp_rule = rules[user][name]
 
-    for rule in temp_rule:
+    for i in range(0, len(temp_rule)):
+        rule = temp_rule[i]
         circuits[user].gates.insert(len(circuits[user].gates), rule)
 
 
